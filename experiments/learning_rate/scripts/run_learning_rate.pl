@@ -30,9 +30,9 @@ config(kin,experiment_file,['../data/kinship/kin.pl',kin]).
 config(kin,copy_plotting_scripts,[learning_rate(plotting)]).
 config(kin,logging_directory,'../experiments/learning_rate/output/kin/').
 config(kin,plotting_directory,'../experiments/learning_rate/output/kin/').
-config(kin,learning_rate_time_limit,[120]).
+config(kin,learning_rate_time_limit,[300]).
 config(kin,depth_limits,[40,0]).
-config(kin,reduction,[none]).
+config(kin,reduction,[plotkins]).
 config(kin,resolutions,[5000]).
 config(kin,recursive_reduction,[true]).
 % mtg_fragment.pl options
@@ -40,7 +40,7 @@ config(mtg_fragment,experiment_file,['../data/mtg/mtg_fragment.pl',mtg_fragment]
 config(mtg_fragment,copy_plotting_scripts,[learning_rate(plotting)]).
 config(mtg_fragment,logging_directory,'../experiments/learning_rate/output/mtg_fragment/').
 config(mtg_fragment,plotting_directory,'../experiments/learning_rate/output/mtg_fragment/').
-config(mtg_fragment,learning_rate_time_limit,[120]).
+config(mtg_fragment,learning_rate_time_limit,[300]).
 config(mtg_fragment,depth_limits,[40,0]).
 config(mtg_fragment,reduction,[none]).
 config(mtg_fragment,resolutions,[5000]).
@@ -50,14 +50,14 @@ config(robots,experiment_file,['../data/robots/robots.pl',robots]).
 config(robots,copy_plotting_scripts,[learning_rate(plotting)]).
 config(robots,logging_directory,'../experiments/learning_rate/output/robots/').
 config(robots,plotting_directory,'../experiments/learning_rate/output/robots/').
-config(robots,learning_rate_time_limit,[120]).
+config(robots,learning_rate_time_limit,[300]).
 config(robots,depth_limits,[40,0]).
-config(robots,reduction,[none]).
+config(robots,reduction,[plotkins]).
 config(robots,resolutions,[5000]).
 config(robots,recursive_reduction,[true]).
 % robots/move_generator.pl options
 config(robots,experiment_world,[empty_world]).
-config(robots,world_dimensions,[2,2]).
+config(robots,world_dimensions,[4,4]).
 
 
 %!      setup(+Dataset) is det.
