@@ -129,8 +129,8 @@ run_mtg_fragment:-
         ,T = ability/2
         ,M = acc
         ,K = 100
-        %,float_interval(1,9,1,Ss)
-        ,interval(1,10,1,Ss)
+        ,float_interval(1,9,1,Ss)
+        %,interval(1,10,1,Ss)
         ,debug(progress,'~w: Starting on mtg_fragment dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
         ,debug(progress,'~w: Finished with mtg_fragment dataset',[L]).
