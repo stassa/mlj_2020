@@ -111,7 +111,7 @@ run_kin:-
         ,once(setup(kin))
         ,T = kin/2
         ,M = acc
-        ,K = 2 %100
+        ,K = 100
         ,float_interval(1,9,1,Ss)
         ,debug(progress,'~w: Starting on kin dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
@@ -128,7 +128,7 @@ run_mtg_fragment:-
         ,once(setup(mtg_fragment))
         ,T = ability/2
         ,M = acc
-        ,K = 2 %100
+        ,K = 100
         %,float_interval(1,9,1,Ss)
         ,interval(1,10,1,Ss)
         ,debug(progress,'~w: Starting on mtg_fragment dataset',[L])
@@ -146,9 +146,9 @@ run_robots:-
         ,once(setup(robots))
         ,T = move/2
         ,M = acc
-        ,K = 2 %100
-        %,float_interval(1,9,1,Ss)
-        ,interval(1,10,1,Ss)
+        ,K = 10
+        ,float_interval(1,9,1,Ss)
+        %,interval(1,10,1,Ss)
         ,move_generator:write_dataset
         ,debug(progress,'~w: Starting on robots dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
