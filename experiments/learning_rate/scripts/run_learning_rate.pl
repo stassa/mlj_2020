@@ -113,8 +113,9 @@ run_kin:-
         ,M = acc
         ,K = 2 %100
         ,float_interval(1,9,1,Ss)
-        ,debug(progress,'Starting on kin dataset with ~w',[L])
-        ,learning_rate(T,M,K,Ss,_Ms,_SDs).
+        ,debug(progress,'~w: Starting on kin dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with kin dataset',[L]).
 
 
 
@@ -130,8 +131,9 @@ run_mtg_fragment:-
         ,K = 2 %100
         %,float_interval(1,9,1,Ss)
         ,interval(1,10,1,Ss)
-        ,debug(progress,'Starting on mtg_fragment dataset with ~w',[L])
-        ,learning_rate(T,M,K,Ss,_Ms,_SDs).
+        ,debug(progress,'~w: Starting on mtg_fragment dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with mtg_fragment dataset',[L]).
 
 
 
@@ -148,8 +150,9 @@ run_robots:-
         %,float_interval(1,9,1,Ss)
         ,interval(1,10,1,Ss)
         ,move_generator:write_dataset
-        ,debug(progress,'Starting on robots dataset with ~w',[L])
-        ,learning_rate(T,M,K,Ss,_Ms,_SDs).
+        ,debug(progress,'~w: Starting on robots dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with robots dataset',[L]).
 
 
 %!      float_interval(+I,+K,+J,-Ss) is det.

@@ -270,11 +270,12 @@ log_experiment_results(M,Ms,SDs):-
 %	deviations of the reasults averaged in Means.
 %
 learning_rate(T,M,K,Ss,Ms,SDs):-
-	start_logging(T)
+	configuration:learner(Lr)
+	,start_logging(T)
 	,learning_rate_configuration:learning_rate_time_limit(L)
 	,log_experiment_setup(T,L,M,K,Ss)
 	,experiment_data(T,Pos,Neg,BK,MS)
-	,learning_rate(T,L,[Pos,Neg,BK,MS],M,K,Ss,Rs)
+	,learning_rate(T,Lr,L,[Pos,Neg,BK,MS],M,K,Ss,Rs)
 	,(   Rs \= []
 	 ->  true
 	 ;   debug(learning_rate,'Empty learning rate result!',[])
@@ -288,7 +289,7 @@ learning_rate(T,M,K,Ss,Ms,SDs):-
 	,print_r_vectors(T,M,Ss,Ms,SDs)
 	,close_log(learning_rate).
 
-%!	learning_rate(+Target,+Limit,+Problem,+Metric,+Steps,+Samples,-Results)
+%!	learning_rate(+Target,+Learner,+Limit,+Problem,+Metric,+Steps,+Samples,-Results)
 %!	is det.
 %
 %	Business end of learning_rates/6.
@@ -303,13 +304,13 @@ learning_rate(T,M,K,Ss,Ms,SDs):-
 %	each sub-list is the lits of values of the chosen Metric for
 %	the corresponding Sample size.
 %
-learning_rate(T,L,[Pos,Neg,BK,MS],M,K,Ss,Rs):-
+learning_rate(T,Lr,L,[Pos,Neg,BK,MS],M,K,Ss,Rs):-
 	findall(Vs
 	       ,(between(1,K,J)
-		,debug(progress,'Step ~w of ~w',[J,K])
+		,debug(progress,'~w:~w Step ~w of ~w',[Lr,T,J,K])
 		,findall(S-V
 			,(member(S,Ss)
-			 ,debug(progress,'Sampling size: ~w',[S])
+			 ,debug(progress,'~w:~w Sampling size: ~w',[Lr,T,S])
 			 % Soft cut stops backtracking into multiple learning steps.
 			 % when training with Thelma or with reduction(subhypothesis)
 			 ,once(timed_train_and_test(T,S,L,[Pos,Neg,BK,MS],Ps,M,V))
