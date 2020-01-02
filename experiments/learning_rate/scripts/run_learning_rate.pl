@@ -9,6 +9,11 @@
 % Nah, just kidding. Louise.
 :-[load_headless].
 
+% Search paths relative to the ones set in load_headless.
+user:file_search_path(experiment_data, project_root('../data')).
+user:file_search_path(experiments, project_root('../experiments')).
+user:file_search_path(learning_rate, experiments(learning_rate)).
+
 :-use_module(learning_rate).
 :-use_module(learning_rate_configuration).
 % Allow dynamic setting of normally static options in Thelma.
@@ -130,7 +135,6 @@ run_mtg_fragment:-
         ,M = acc
         ,K = 100
         ,float_interval(1,9,1,Ss)
-        %,interval(1,10,1,Ss)
         ,debug(progress,'~w: Starting on mtg_fragment dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
         ,debug(progress,'~w: Finished with mtg_fragment dataset',[L]).
@@ -148,7 +152,6 @@ run_robots:-
         ,M = acc
         ,K = 10
         ,float_interval(1,9,1,Ss)
-        %,interval(1,10,1,Ss)
         ,move_generator:write_dataset
         ,debug(progress,'~w: Starting on robots dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
@@ -168,28 +171,6 @@ float_interval(I,K,J,Ss):-
         ,findall(S,(member(I_,Is)
                    ,S is I_ /10)
                 ,Ss).
-
-
-%!      set_configuration_option(+Name, +Value) is det.
-%
-%       Set the Value of the Name'd configuration option.
-%
-%       Counterpart to set_configuration_option/2, to dynamically set
-%       learning rate experiment configuration options.
-%
-%       Use this to set configuration options defined in
-%       learning_rate_configuration.pl.
-%
-set_local_configuration_option(N, V):-
-	atomic(V)
-	,!
-	,set_local_configuration_option(N,[V]).
-set_local_configuration_option(N, Vs):-
-	length(Vs, A)
-	,functor(T,N,A)
-	,T_ =.. [N|Vs]
-	,retractall(learning_rate_configuration:T)
-	,assert(learning_rate_configuration:T_).
 
 
 %!      set_local_configuration_option(+Module,+Name,+Value) is det.
