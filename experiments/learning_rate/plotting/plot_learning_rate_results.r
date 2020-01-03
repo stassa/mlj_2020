@@ -34,7 +34,7 @@ results.size <- length(learner.eval.mean)
 x.axis <- learner.sampling.rates
 
 # Calculate standard errors.
-learner.eval.se <- learner.eval.mean / sqrt(results.size)
+learner.eval.se <- learner.eval.sd / sqrt(results.size)
 
 # Calculate plot limits
 y.lim.max <- max(learner.eval.mean+learner.eval.se, learner.eval.mean+learner.eval.se) + 0.1 # Space for legend
