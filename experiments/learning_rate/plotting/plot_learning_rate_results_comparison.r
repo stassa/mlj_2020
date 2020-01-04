@@ -58,7 +58,7 @@ leg.size <- legend('topleft', inset=0.02, legend=leg.text, lty=leg.lin.typs, pch
 y.lim.max <- max(thelma.eval.mean+thelma.eval.se, louise.eval.mean+louise.eval.se) + 0.1 # Space for legend
 y.lim.min <- min(thelma.eval.mean-thelma.eval.se, louise.eval.mean-louise.eval.se)
 # Note legend size added to y max limit multiplied by a small factor to move it a little above the limit of the plot
-y.lim <- c(y.lim.min, 1.08 * y.lim.max + leg.size$rect$h)
+y.lim <- c(y.lim.min, 1.05 * y.lim.max + leg.size$rect$h)
 x.lim <- c(1, results.length + 0.5)
 
 p <- par()
