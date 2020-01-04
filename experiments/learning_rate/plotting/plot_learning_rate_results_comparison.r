@@ -50,9 +50,15 @@ x.axis <- thelma.sampling.rates
 thelma.eval.se <- thelma.eval.sd / sqrt(results.length)
 louise.eval.se <- louise.eval.sd / sqrt(results.length)
 
+# Get size of legend to add to y-axis limit
+# Taken from:
+# https://stackoverflow.com/questions/8929663/r-legend-placement-in-a-plot
+leg.size <- legend('topleft', inset=0.02, legend=leg.text, lty=leg.lin.typs, pch=leg.pnt.typs, cex=leg.cex, lwd=leg.lwd, plot=F)
+
 y.lim.max <- max(thelma.eval.mean+thelma.eval.se, louise.eval.mean+louise.eval.se) + 0.1 # Space for legend
 y.lim.min <- min(thelma.eval.mean-thelma.eval.se, louise.eval.mean-louise.eval.se)
-y.lim <- c(y.lim.min, y.lim.max)
+# Note legend size added to y max limit multiplied by a small factor to move it a little above the limit of the plot
+y.lim <- c(y.lim.min, 1.08 * y.lim.max + leg.size$rect$h)
 x.lim <- c(1, results.length + 0.5)
 
 p <- par()
