@@ -42,7 +42,7 @@ learn(Pos,Neg,_BK,_MS,Ps):-
     ,(   learn(Pos,Neg,Ps_)
      ->  clause_expansion(Ps_,Ps)
      ;   Ps = []
-        ,format('No solution~n',[])
+        ,debug(metagol,'No solution',[])
      ).
 
 
