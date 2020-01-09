@@ -16,6 +16,9 @@
 
 */
 
+%:-debug(metagol).
+
+
 %!	experiment_file(?Path,?Module) is semidet.
 %
 %	The Path and Module name of an experiment file.
