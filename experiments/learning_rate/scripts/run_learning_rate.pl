@@ -16,6 +16,7 @@ user:file_search_path(learning_rate, experiments(learning_rate)).
 
 :-use_module(learning_rate).
 :-use_module(learning_rate_configuration).
+:-use_module(lib(mathemancy/mathemancy)).
 % Allow dynamic setting of normally static options in Thelma.
 :-dynamic configuration:experiment_file/2
          ,configuration:depth_limits/2.
@@ -23,7 +24,16 @@ user:file_search_path(learning_rate, experiments(learning_rate)).
 
 % Make Swi debug messages readable in default-coloured powershell.
 user:message_property(debug(learning_rate), color( [ fg(cyan) ]) ).
+user:message_property(debug(learning_rate_setup), color( [ fg(cyan) ]) ).
+user:message_property(debug(run_learning_rate_setup), color( [ fg(cyan) ]) ).
 user:message_property(debug(progress), color( [ fg(yellow) ]) ).
+
+:-debug(run_learning_rate_setup).
+
+:-dynamic metagol:max_clauses/1
+         ,metagol:max_inv_preds/1
+         ,metagol:min_clauses/1
+         ,metagol:metarule/6.
 
 
 %!      config(?Dataset,?Option,?Value) is semidet.
@@ -40,6 +50,10 @@ config(kin,depth_limits,[40,0]).
 config(kin,reduction,[plotkins]).
 config(kin,resolutions,[5000]).
 config(kin,recursive_reduction,[true]).
+% Metagol options
+config(kin,max_clauses,[40]).
+config(kin,max_inv_preds,[0]).
+config(kin,min_clauses,[1]).
 % mtg_fragment.pl options
 config(mtg_fragment,experiment_file,['../data/mtg/mtg_fragment.pl',mtg_fragment]).
 config(mtg_fragment,copy_plotting_scripts,[learning_rate(plotting)]).
@@ -50,6 +64,10 @@ config(mtg_fragment,depth_limits,[40,0]).
 config(mtg_fragment,reduction,[none]).
 config(mtg_fragment,resolutions,[5000]).
 config(mtg_fragment,recursive_reduction,[true]).
+% Metagol options
+config(mtg_fragment,max_clauses,[40]).
+config(mtg_fragment,max_inv_preds,[0]).
+config(mtg_fragment,min_clauses,[1]).
 % robots.pl options
 config(robots,experiment_file,['../data/robots/robots.pl',robots]).
 config(robots,copy_plotting_scripts,[learning_rate(plotting)]).
@@ -60,6 +78,10 @@ config(robots,depth_limits,[40,0]).
 config(robots,reduction,[plotkins]).
 config(robots,resolutions,[5000]).
 config(robots,recursive_reduction,[true]).
+% Metagol options
+config(robots,max_clauses,[40]).
+config(robots,max_inv_preds,[0]).
+config(robots,min_clauses,[1]).
 % robots/move_generator.pl options
 config(robots,experiment_world,[empty_world]).
 config(robots,world_dimensions,[4,4]).
@@ -80,6 +102,11 @@ setup(D):-
         ,config(D,reduction,R)
         ,config(D,resolutions,S)
         ,config(D,recursive_reduction,RR)
+        % metagol options
+        ,config(D,max_clauses,Max_C)
+        ,config(D,max_inv_preds,MI)
+        ,config(D,min_clauses,Min_C)
+        % Move generator options
         ,(   D = robots
          ->  config(D,experiment_world,EW)
             ,config(D,world_dimensions,WD)
@@ -96,6 +123,11 @@ setup(D):-
          ->  set_configuration_option(reduction,R)
             ,set_configuration_option(resolutions,S)
             ,set_configuration_option(recursive_reduction,RR)
+         ;   L = metagol
+         ->  set_local_configuration_option(metagol,max_clauses,Max_C)
+            ,set_local_configuration_option(metagol,max_inv_preds,MI)
+            ,set_local_configuration_option(metagol,min_clauses,Min_C)
+            ,write_dataset(D)
          ;   format(atom(E),'Unknown learner: ~w',[L])
             ,throw(E)
          )
@@ -105,6 +137,26 @@ setup(D):-
          ;   true
          ).
 
+
+%!      write_dataset(+Dataset) is det.
+%
+%       Write the metagol dataset for the given er Dataset.
+%
+write_dataset(D):-
+        memberchk(D-T,[kin-kin/2
+                      ,mtg_fragment-ability/2
+                      ,robots-move/2
+                      ])
+        ,metagol_data_file(D,_Dir,_Fn,P)
+        % Get name of module to print out relative path
+        ,module_property(run_learning_rate, file(M))
+        ,(   exists_file(P)
+         ->  true
+         ;   relative_file_name(P,M,R)
+            ,debug(learning_rate_setup,'Did not find dataset ~w',[R])
+            ,write_metagol_dataset(T)
+            ,debug(learning_rate_setup,'Wrote dataset ~w',[R])
+         ).
 
 
 %!      run_kin is det.
@@ -117,6 +169,7 @@ run_kin:-
         ,T = kin/2
         ,M = acc
         ,K = 100
+        %,interval(1,10,1,Ss)
         ,float_interval(1,9,1,Ss)
         ,debug(progress,'~w: Starting on kin dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
@@ -134,6 +187,7 @@ run_mtg_fragment:-
         ,T = ability/2
         ,M = acc
         ,K = 100
+        %,interval(1,10,1,Ss)
         ,float_interval(1,9,1,Ss)
         ,debug(progress,'~w: Starting on mtg_fragment dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
@@ -151,6 +205,7 @@ run_robots:-
         ,T = move/2
         ,M = acc
         ,K = 10
+        %,interval(1,10,1,Ss)
         ,float_interval(1,9,1,Ss)
         ,move_generator:write_dataset
         ,debug(progress,'~w: Starting on robots dataset',[L])

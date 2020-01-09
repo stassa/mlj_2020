@@ -4,6 +4,7 @@
 :-use_module(configuration).
 :-use_module(learning_rate_configuration).
 :-use_module(lib(evaluation/evaluation)).
+:-use_module(lib(mathemancy/mathemancy)).
 :-use_module(src(auxiliaries)).
 
 /** <module> Experiment script for learnign rate experiments.
