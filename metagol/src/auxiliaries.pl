@@ -32,6 +32,16 @@ this is noted in the documentation for that predicate.
 */
 
 
+%!	write_metagol_dataset(+Target) is semidet.
+%
+%	Create a dataset for Target in Metagol's format.
+%
+%	Target should be a learning target defined in the currently
+%	loaded experiment file. This predicate will create a new dataset
+%	in Thelma's format, place it in a Prolog file (not a module) in
+%	the location determined in metagol_data/1 and load it into
+%	memory, ready for use.
+%
 write_metagol_dataset(T):-
 	experiment_file(_P,M)
 	,experiment_data(T,Pos,Neg,BK,MS)
@@ -69,7 +79,7 @@ convert(bk,BK,BK_):-
 convert(ms,IDs,MS):-
 	findall(M
 	       ,(member(Id, IDs)
-		,named_metarule(Id,M)
+		,configuration:named_metarule(Id,M)
 		)
 	       ,MS).
 convert(pos(T),Pos,Pos_):-

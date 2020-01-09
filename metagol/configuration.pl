@@ -13,11 +13,12 @@
 :-reexport(lib/sampling/sampling_configuration).
 
 /** <module> Configuration options for Louise compatibility layer.
-
 */
 
-%:-debug(metagol).
+% Allow experiment files to declare their own metarules.
+:-multifile named_metarule/2.
 
+%:-debug(metagol).
 
 %!	experiment_file(?Path,?Module) is semidet.
 %
@@ -117,7 +118,6 @@ metagol:min_clauses(1).
 % Repeated for the sake of print_config/3
 min_clauses(Max):-
         metagol:min_clauses(Max).
-
 
 
 %!      metagol_data(?Path) is semidet.
