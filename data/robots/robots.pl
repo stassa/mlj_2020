@@ -43,9 +43,18 @@
 % MIL problem
 % ========================================
 
-% The metarule format for the two learners is currently different and
+% The metarule format for the three learners is currently different and
 % so needs disambiguation at load time.
-:-if(learner(thelma)).
+:-if(learner(metagol)).
+
+configuration:named_metarule(tri_chain_1, metarule([P,Q,R,M]
+						  ,[P,X,Y], [[Q,M,X,Z],[R,Z,Y]])).
+configuration:named_metarule(tri_chain_2, metarule([P,Q,R,M]
+						  ,[P,X,Y], [[Q,X,Z],[R,M,Z,Y]])).
+configuration:named_metarule(tri_chain_3,metarule([P,Q,R,M1,M2]
+						 ,[P,X,Y], [[Q,M1,X,Z],[R,M2,Z,Y]])).
+
+:-elif(learner(thelma)).
 
 configuration:metarule(tri_chain_1,[P,Q,R,M],[X,Y,M,Z]
 		      ,(mec(P,X,Y):-mec(Q,M,X,Z),mec(R,Z,Y))).
