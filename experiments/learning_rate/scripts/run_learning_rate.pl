@@ -3,6 +3,21 @@
                             ,run_robots/0
                             ]).
 
+/** <module> Running script for learning_rate.pl experiment.
+
+Formalises running of learning rate experiment comparing Louise to
+Thelma or Metagol. Sets configuration options and other necessary
+parameters and should also act as documentation of those options for
+future reference and to repeat the experiments.
+*/
+
+% move/2 programs learned by Louise with a high sampling rate can be
+% quite large (over 2k clauses for a 4x4 grid) and that blows the
+% tabling space during evaluation (we table the target predicate of a
+% problem to avoid going infinite with left-recursion during
+% evaluation). 8GB seems to be enough of an increase to avoid this.
+:-set_prolog_flag(table_space, 8_589_934_592).
+
 % Must be run in the top directory of thelma or louise.
 % Running in thelma/ will run the experiments with thelma.
 % Running in louise/ will run the experiment with Aleph.
