@@ -33,7 +33,7 @@ background_knowledge(kin/2, [ancestor/2
                             ,male/1
                             ,female/1]).
 
-metarules(kin/2,[chain,switch,precon]).
+metarules(kin/2,[chain,tailrec,switch,precon]).
 
 positive_example(kin/2,kin(A,B)):-
 	kin(A,B)

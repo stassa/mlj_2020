@@ -94,6 +94,7 @@ background_knowledge(move/2, [% Move primitives
 			  ]).
 
 metarules(move/2,[chain
+		 ,tailrec
 		 ,tri_chain_1
 		 ,tri_chain_2
 		 ,tri_chain_3
