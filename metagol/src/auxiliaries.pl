@@ -42,6 +42,9 @@ this is noted in the documentation for that predicate.
 %	the location determined in metagol_data/1 and load it into
 %	memory, ready for use.
 %
+%	@tbd The new metagol dataset will clobber any preexisting file
+%	with the same name and path.
+%
 write_metagol_dataset(T):-
 	experiment_file(_P,M)
 	,experiment_data(T,Pos,Neg,BK,MS)
@@ -49,11 +52,14 @@ write_metagol_dataset(T):-
 	,convert(ms,MS,MS_)
 	,convert(pos(T),Pos,Pos_)
 	,convert(neg(T),Neg,Neg_)
+	,collect_options(Os)
 	,closure(BK,M,Cs)
 	,metagol_data_file(M,D,_Fn,P)
 	,make_directory_path(D)
 	,S = open(P,write,Str,[alias(metagol_data_file)])
-	,G = (forall(member(As,[BK_,MS_,Pos_,Neg_])
+	,G = (write_terms(Str,Os)
+	     ,format(Str,'~n',[])
+	     ,forall(member(As,[BK_,MS_,Pos_,Neg_])
 		    ,(write_terms(Str,As)
 		     ,format(Str,'~n',[])
 		     )
@@ -92,6 +98,20 @@ convert(neg(T),Neg,Neg_):-
 	       ,(member(E,Neg)
 		)
 	       ,Neg_).
+
+
+%!	collect_options(+Options) is det.
+%
+%	Collect Metagol options to add to the Metagol dataset.
+%
+collect_options(Cs):-
+	metagol:max_clauses(Max_C)
+	,metagol:min_clauses(Min_C)
+	,metagol:max_inv_preds(Max_Inv)
+	,Cs = [metagol:max_clauses(Max_C)
+	      ,metagol:min_clauses(Min_C)
+	      ,metagol:max_inv_preds(Max_Inv)
+	      ].
 
 
 %!	metagol_data_file(+Base,-Dir,-Name,-Path) is det.
