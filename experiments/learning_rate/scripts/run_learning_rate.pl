@@ -132,6 +132,11 @@ setup(D):-
         ,set_local_configuration_option(learning_rate,logging_directory,LD)
         ,set_local_configuration_option(learning_rate,plotting_directory,PD)
         ,set_local_configuration_option(learning_rate,learning_rate_time_limit,TL)
+        ,(   D = robots
+         ->  set_local_configuration_option(robots,experiment_world,EW)
+            ,set_local_configuration_option(robots,world_dimensions,WD)
+         ;   true
+         )
         ,(   L = thelma
          ->  set_configuration_option(depth_limits,DL)
          ;   L = louise
@@ -145,11 +150,6 @@ setup(D):-
             ,write_dataset(D)
          ;   format(atom(E),'Unknown learner: ~w',[L])
             ,throw(E)
-         )
-        ,(   D = robots
-         ->  set_local_configuration_option(robots,experiment_world,EW)
-            ,set_local_configuration_option(robots,world_dimensions,WD)
-         ;   true
          ).
 
 
