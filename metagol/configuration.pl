@@ -26,7 +26,8 @@
 %
 experiment_file('data/examples/tiny_kinship.pl',tiny_kinship).
 %experiment_file('data/examples/anbn.pl',anbn).
-
+%experiment_file('../data/robots/robots.pl',robots).
+%experiment_file('../data/kinship/kin.pl',kin).
 
 %!      dynamic_predicates(?Predicates) is semidet.
 %

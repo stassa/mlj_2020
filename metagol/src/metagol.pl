@@ -22,6 +22,17 @@
 default(max_clauses(10)).
 
 
+%!  learn(+Basename) is nondet.
+%
+%   Learn a hypothesis from an experiment file.
+%
+%   Basename is the name of a file that defines a MIL problem in the
+%   format expected by Metagol and located in the path specified in the
+%   configuration option metagol_data/1.
+%
+%   learn/3 variant not in the original Metagol, added for compatibility
+%   with Louise and evaluation module predicates.
+%
 learn(Bn):-
     basename_examples(Bn,Pos,Neg)
     ,learn(Pos,Neg,Ps)
@@ -35,14 +46,17 @@ learn(Bn):-
 %   Compatibility predicate to allow calling learn/3 from
 %   lib/evaluation/evaluation predicates.
 %
+%   learn/3 variant not in the original Metagol, added for compatibility
+%   with Louise and evaluation module predicates.
+%
 learn(Pos,Neg,_BK,_MS,Ps):-
     configuration:experiment_file(_P,Bn)
     ,metagol_data_file(Bn,_D,_Fn,P)
     ,user:ensure_loaded(P)
-    ,(   learn(Pos,Neg,Ps_)
+    ,learn(Pos,Neg,Ps_)
+    ,(   Ps_ \= []
      ->  clause_expansion(Ps_,Ps)
      ;   Ps = []
-        ,debug(metagol,'No solution',[])
      ).
 
 
@@ -55,6 +69,14 @@ clause_expansion(Prog1,Prog2):-
     maplist(metasub_to_clause,Prog3,Prog2).
 
 
+%!  basename_examples(+Basename,+Pos,+Neg) is det.
+%
+%   Collect examples from an experiment file.
+%
+%   Basename is the basename of a file that defines a MIL problem in the
+%   format that is accepted by Metagol and located in the path specified in the
+%   configuration option metagol_data/1.
+%
 basename_examples(Bn,Pos,Neg):-
     metagol_data_file(Bn,_D,_Fn,P)
     ,user:ensure_loaded(P)
@@ -87,9 +109,13 @@ learn(Pos1,Neg1,Prog):-
     check_functional(Pos2,Sig,Prog).
 
 % We need to capture failure, too, in the output program.
-learn_(_,_,_):-!,
-    writeln('% unable to learn a solution'),
-    false.
+learn(_,_,[]):-!,
+% Changes from the original version of learn/3 in Metagol:
+% a) The original version failed instead of returning [].
+% b) The original version uses writeln/1 instead of debug/3 to report
+% learning progress.
+    debug(metagol,'Unable to learn a solution',[]).
+
 
 proveall(Atoms,Sig,Prog):-
     target_predicate(Atoms,P/A),
