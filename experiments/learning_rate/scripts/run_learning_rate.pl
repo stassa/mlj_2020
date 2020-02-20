@@ -183,9 +183,12 @@ run_kin:-
         ,once(setup(kin))
         ,T = kin/2
         ,M = acc
-        ,K = 100
-        %,interval(1,10,1,Ss)
-        ,float_interval(1,9,1,Ss)
+        %,K = 100
+        %,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
+        ,K = 10
+        ,interval(1,10,1,Ss)
         ,debug(progress,'~w: Starting on kin dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
         ,debug(progress,'~w: Finished with kin dataset',[L]).
@@ -201,9 +204,12 @@ run_mtg_fragment:-
         ,once(setup(mtg_fragment))
         ,T = ability/2
         ,M = acc
-        ,K = 100
-        %,interval(1,10,1,Ss)
-        ,float_interval(1,9,1,Ss)
+        %,K = 100
+        %,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
+        ,K = 10
+        ,interval(1,10,1,Ss)
         ,debug(progress,'~w: Starting on mtg_fragment dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
         ,debug(progress,'~w: Finished with mtg_fragment dataset',[L]).
@@ -219,9 +225,12 @@ run_robots:-
         ,once(setup(robots))
         ,T = move/2
         ,M = acc
+        %,K = 10
+        %,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
         ,K = 10
-        %,interval(1,10,1,Ss)
-        ,float_interval(1,9,1,Ss)
+        ,interval(1,10,1,Ss)
         ,move_generator:write_dataset
         ,debug(progress,'~w: Starting on robots dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
