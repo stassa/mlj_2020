@@ -1,6 +1,7 @@
 :-module(configuration, [experiment_file/2
                         ,dynamic_predicates/1
                         ,learner/1
+                        ,learning_predicate/1
                         ,max_clauses/1
                         ,max_inv_preds/1
                         ,min_clauses/1
@@ -71,6 +72,53 @@ dynamic_predicates([metagol:ibk/3
 %       present in Thelma etc).
 %
 learner(metagol).
+
+
+%!	learning_predicate(+Learning_Predicate) is semidet.
+%
+%	The Learning_Predicate to be used in list_learning_results/0.
+%
+%	Learning_Predicate is a predicate indicator, the symbol and
+%	arity of one of the following learning predicates defined in
+%	Louise: learn/1, learn_dynamic/1 or
+%	learn_with_examples_invention/2. The specified predicate will be
+%	used to list the learning results for all learning targets
+%	defined in an experiment file with a call to
+%	list_learning_results/0.
+%
+%	learning_predicate/1 is declared as multifile. To specify the
+%	learning predicate to be used with list_learning_results/0, add
+%	a clause of learning_predicate/1 to the relevant experiment
+%	file.
+%
+%	For example, the following clause:
+%	==
+%	configuration:learning_predicate(learn_dynamic/1).
+%	==
+%
+%	Will cause list_learning_results/0 to use learn_dynamic/1 for
+%	all predicates in the experiment file containing that clause.
+%
+%	learning_predicate/1 is declared dynamic. You do not have to
+%	specify a learning predicate for every experiment file.
+%	list_learning_results/0 will default to learn/1.
+%
+%	Note that learning_predicate/1 will not affect learning by
+%	calling learning predicates directly. That is, having added a
+%	clause of learning_predicate/1 like the one above to an
+%	experiment file you are free to then call learn/1 or any other
+%	learning predicate on any of the learning targets in that
+%	experiment file. Only the learning predicate used by
+%	list_learning_results/0 is affected by this option.
+%
+%	Finally, note that specifying any other predicate than the three
+%	learning predicates listed above as a learning_predicate will
+%	cause list_learning_results/0 to raise an error.
+%
+%	@see list_learning_results/0
+%
+:-dynamic learning_predicate/1.
+:-multifile learning_predicate/1.
 
 
 %!      max_clauses(?Maximum) is semidet.
