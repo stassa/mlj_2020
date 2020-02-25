@@ -39,41 +39,30 @@ positive_example(kin/2,kin(A,B)):-
 	kin(A,B)
 	,A \= B.
 
-negative_example(kin/2,kin(A,A)):-
+negative_example_(kin/2,kin(A,A)):-
 	kin(A,A).
 
-%/*
+negative_example(kin/2,kin(A,B)):-
+	individual(A)
+	,individual(B)
+	,A \= B
+	,\+ once(kin(A,B)).
+
+individual(A):-
+	male(A).
+individual(A):-
+	female(A).
+
+%/* Target theory
 kin(A,B):- ancestor(A,B).
+kin(A,B):- ancestor(B,A).
+kin(A,B):- ancestor(C,A), ancestor(C,B).
 kin(A,B):- husband(A,B).
 kin(A,B):- wife(A,B).
-kin(A,B):- child(A,B).
+%kin(A,B):- child(A,B).
 %*/
 
-/*
-% Ancestor
-kin(X,Y):- parent(X,Y).
-kin(X,Y):- parent(X,Z) ,kin(Z,Y).
-% Grandparent
-kin(X,Y):- grandfather(X,Y).
-kin(X,Y):- grandmother(X,Y).
-% Grandfather
-kin(A,B):- father(A,C), parent(C,B).
-% Grandmother
-kin(A,B):- mother(A,C), parent(C,B).
-% Parent
-kin(X, Y):- father(X,Y).
-kin(X, Y):- mother(X,Y).
-% Husband
-kin(X,Y):- father(X,Z), mother(Y,Z).
-% Wife
-kin(X,Y):- mother(X,Z), father(Y,Z).
-% Child
-kin(X,Y):- parent(Y,X).
-% Son
-kin(X,Y):- male(X), child(X,Y).
-% Daughter
-kin(X,Y):- female(X), child(X,Y).
-*/
+% Background knowledge.
 
 ancestor(X,Y):-
 	parent(X,Y).
@@ -121,17 +110,33 @@ daughter(X,Y):-
 
 father(stathis, kostas).
 father(stefanos, dora).
+father(stefanos,akis).
 father(kostas, stassa).
+father(akis,kostis).
+father(vassilis,nikolas).
+father(vassilis,alexandros).
 
 mother(alexandra, kostas).
 mother(paraskevi, dora).
+mother(paraskevi, akis).
 mother(dora, stassa).
+mother(efi,kostis).
+mother(georgia, nikolas).
+mother(georgia, alexandros).
 
 male(stathis).
 male(stefanos).
 male(kostas).
+male(akis).
+male(kostis).
+male(vassilis).
+male(nikolas).
+male(alexandros).
 
 female(dora).
 female(stassa).
 female(alexandra).
 female(paraskevi).
+female(efi).
+female(georgia).
+
