@@ -130,16 +130,17 @@ experiment_data(T,_,_,_,_):-
 experiment_data(T,Pos,Neg,BK,MS):-
         configuration:metagol_data_file(P)
         ,user:ensure_loaded(P)
-        ,setof(E
-              ,user:T^pos(T,E)
-              ,Pos)
-        ,setof(E
-              ,user:T^neg(T,E)
-              ,Neg)
-        ,setof(F/A
-              ,body_pred(F/A)
-              ,BK)
-              ,experiment_metarules(MS).
+        ,findall(E
+                ,user:pos(T,E)
+                ,Pos_)
+        ,findall(E
+                ,user:neg(T,E)
+                ,Neg_)
+        ,maplist(sort,[Pos_,Neg_],[Pos,Neg])
+        ,findall(F/A
+                ,body_pred(F/A)
+                ,BK)
+        ,experiment_metarules(MS).
 
 
 %!      experiment_metarules(-IDs) is det.
@@ -321,12 +322,13 @@ write_metagol_dataset(Ef,M,T):-
 % ! louise_experiment_data(+Module,+Target,-Pos,-Neg,-BK,-Metarules) is
 % det.
 louise_experiment_data(M,T,Pos,Neg,BK,MS):-
-        setof(E
-             ,M^T^(M:positive_example(T,E))
-             ,Pos)
-        ,setof(E
-              ,M^T^(M:negative_example(T,E))
-              ,Neg)
+        findall(E
+             ,M:positive_example(T,E)
+             ,Pos_)
+        ,findall(E
+              ,M:negative_example(T,E)
+              ,Neg_)
+        ,maplist(sort,[Pos_,Neg_],[Pos,Neg])
         ,M:background_knowledge(T,BK)
         ,M:metarules(T,MS).
 
@@ -351,10 +353,16 @@ convert(pos(T),Pos,Pos_):-
 		)
 	       ,Pos_).
 convert(neg(T),Neg,Neg_):-
-	findall(neg(T,E)
-	       ,(member(E,Neg)
-		)
-	       ,Neg_).
+% Negative examples may be empty - this is handled in the conditional
+% below.
+        findall(neg(T,E)
+               ,(member(E,Neg)
+                )
+               ,Neg_1)
+        ,(   Neg_1 == []
+         ->  Neg_ = [(neg('$VAR'('_'),'$VAR'('_')):- false)]
+         ;   Neg_ = Neg_1
+	 ).
 
 
 %!	collect_options(+Options) is det.
