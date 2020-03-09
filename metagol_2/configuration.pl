@@ -152,8 +152,10 @@ metagol_data_directory(data(experiment)).
 %
 %       Path to the current Metagol data file.
 %
-%metagol_data_file(data(examples/tiny_kinship)).
-metagol_data_file(data(experiment/kin)).
+metagol_data_file(data(examples/tiny_kinship)).
+%metagol_data_file(data(experiment/kin)).
+%metagol_data_file(data(experiment/mtg_fragment)).
+%metagol_data_file(data(experiment/robots)).
 
 
 %!      named_metarule(?Name, ?Metarule) is semidet.
@@ -180,3 +182,7 @@ named_metarule(chain_abduce_y, metarule([P,Q,R,Y], [P,X,Y], [[Q,X,Z],[R,Z,Y]])).
 named_metarule(chain_abduce_z, metarule([P,Q,R,Z], [P,X,Y], [[Q,X,Z],[R,Z,Y]])).
 named_metarule(projection_21_abduce, metarule([P,Q,X], [P,X,X], [[Q,X]])).
 named_metarule(projection_21_abduce, metarule([P,Q,X], [P,X], [[Q,X,X]])).
+% Used in robots experiments to allow higher-order moves.
+named_metarule(tri_chain_1, metarule([P,Q,R,M],[P,X,Y], [[Q,M,X,Z],[R,Z,Y]])).
+named_metarule(tri_chain_2, metarule([P,Q,R,M],[P,X,Y], [[Q,X,Z],[R,M,Z,Y]])).
+named_metarule(tri_chain_3,metarule([P,Q,R,M1,M2],[P,X,Y], [[Q,M1,X,Z],[R,M2,Z,Y]])).
