@@ -11,7 +11,7 @@
 # deleted, listed below.
 
 $louise_root="../../../louise"
-$metagol_root="../../../metagol_2"
+$metagol_root="../../../metagol"
 $experiment_root="../"
 $data_root="../../../data"
 

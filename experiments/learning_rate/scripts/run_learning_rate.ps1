@@ -1,7 +1,7 @@
 $script="../experiments/learning_rate/scripts/run_learning_rate.pl"
 $to_script_from_learners="../experiments/learning_rate/scripts"
 $louise_root="../../../louise"
-$metagol_root="../../../metagol_2"
+$metagol_root="../../../metagol"
 
 . cd $louise_root
 
