@@ -40,7 +40,8 @@
 %       (i.e. everything is copied, simple dimple).
 %
 %copy_plotting_scripts(false).
-copy_plotting_scripts(scripts(plotting/learning_rate)).
+%copy_plotting_scripts(scripts(plotting/learning_rate)).
+copy_plotting_scripts('../experiments/learning_rate/plotting').
 
 
 %!	logging_directory(?Directory) is semidet.
