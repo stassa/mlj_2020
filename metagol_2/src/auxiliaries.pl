@@ -68,6 +68,7 @@ learn(Pos,Neg,_BK,_MS,Ps):-
         metagol:learn(Pos,Neg,Prog1)
         ,reverse(Prog1,Prog3),
         maplist(metagol:metasub_to_clause,Prog3,Ps).
+learn(_Pos,_Neg,_BK,_MS,[]).
 
 
 
