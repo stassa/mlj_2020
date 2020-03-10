@@ -193,7 +193,8 @@ start_logging(F/A):-
 	,file_name_extension(Bn,'.log',Fn)
 	,directory_file_path(D,Fn,P)
 	,open(P,write,S,[alias(learning_rate)])
-	,debug(learning_rate>S).
+	,debug(learning_rate>S)
+	,debug(learning_rate_full>S).
 
 
 %!	close_log(+Alias) is det.
@@ -222,7 +223,26 @@ log_experiment_setup(T,L,M,K,Ss):-
 	,debug(learning_rate,'Time limit (sec): ~w',[L])
 	,debug(learning_rate,'',[])
 	,debug(learning_rate,'Configuration options:',[])
-	,print_config(debug,learning_rate,all).
+	,print_config(debug,learning_rate,all)
+	,log_problem_statistics(T).
+
+
+%!	log_problem_statistics(+Target) is det.
+%
+%	List statistics of the MIL problem for Target.
+%
+%	Currently this only lists the numbers of positive and negative
+%	examples, background definitions and metarules in the initial
+%	MIL problem for Target (i.e. before any automatic modifications
+%	such as metarule extension).
+%
+log_problem_statistics(T):-
+	experiment_data(T,Pos,Neg,BK,MS)
+	,maplist(length,[Pos,Neg,BK,MS],[I,J,K,N])
+	,debug(learning_rate,'Positive examples:    ~w', [I])
+	,debug(learning_rate,'Negative examples:    ~w', [J])
+	,debug(learning_rate,'Background knowledge: ~w ~w', [K,BK])
+	,debug(learning_rate,'Metarules:            ~w ~w ', [N,MS]).
 
 
 %!	log_experiment_setup(+Metric,+Means,+SDs) is det.
@@ -309,18 +329,20 @@ learning_rate(T,Lr,L,[Pos,Neg,BK,MS],M,K,Ss,Rs):-
 	findall(Vs
 	       ,(between(1,K,J)
 		,debug(progress,'~w:~w Step ~w of ~w',[Lr,T,J,K])
+		,debug(learning_rate_full,'~w:~w Step ~w of ~w',[Lr,T,J,K])
 		,findall(S-V
 			,(member(S,Ss)
 			 ,debug(progress,'~w:~w Sampling size: ~w',[Lr,T,S])
+			 ,debug(learning_rate_full,'~w:~w Sampling size: ~w',[Lr,T,S])
 			 % Soft cut stops backtracking into multiple learning steps.
 			 % when training with Thelma or with reduction(subhypothesis)
 			 ,once(timed_train_and_test(T,S,L,[Pos,Neg,BK,MS],Ps,M,V))
 			 ,debug_clauses(learning_rate_full,'Learned:',Ps)
 			 ,debug(learning_rate_full,'Measured ~w: ~w',[M,V])
+			 ,length(Ps, N)
+			 ,debug(learning_rate_full,'Hypothesis size: ~w',[N])
 			 )
 			,Vs)
-		,length(Vs, N)
-		,debug(learning_rate_full,'Hypothesis size: ~w',[N])
 		)
 	       ,Rs).
 
