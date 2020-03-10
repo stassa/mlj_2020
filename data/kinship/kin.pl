@@ -31,21 +31,26 @@ background_knowledge(kin/2, [ancestor/2
                             ,father/2
                             ,mother/2
                             ,male/1
-                            ,female/1]).
+                            ,female/1
+			    ]).
 
 metarules(kin/2,[chain,tailrec,switch,precon]).
+%metarules(kin/2,[identity,inverse,swap]).
 
 positive_example(kin/2,kin(A,B)):-
 	kin(A,B)
-	,A \= B.
+	%,A \= B
+	.
 
+negative_example_(kin/2,_):-
+	false.
 negative_example_(kin/2,kin(A,A)):-
 	kin(A,A).
 
 negative_example(kin/2,kin(A,B)):-
 	individual(A)
 	,individual(B)
-	,A \= B
+	%,A \= B
 	,\+ once(kin(A,B)).
 
 individual(A):-
@@ -53,14 +58,20 @@ individual(A):-
 individual(A):-
 	female(A).
 
-%/* Target theory
+/* Target theory
+kin(A,B):- ancestor(A,B), A \= B.
+kin(A,B):- ancestor(B,A), A \= B.
+kin(A,B):- ancestor(C,A), ancestor(C,B), A \= B.
+kin(A,B):- husband(A,B), A \= B.
+kin(A,B):- wife(A,B), A \= B.
+%kin(A,B):- child(A,B).
+*/
 kin(A,B):- ancestor(A,B).
 kin(A,B):- ancestor(B,A).
 kin(A,B):- ancestor(C,A), ancestor(C,B).
 kin(A,B):- husband(A,B).
 kin(A,B):- wife(A,B).
-%kin(A,B):- child(A,B).
-%*/
+
 
 % Background knowledge.
 
@@ -109,6 +120,7 @@ daughter(X,Y):-
 
 
 father(stathis, kostas).
+father(stathis, georgia).
 father(stefanos, dora).
 father(stefanos,akis).
 father(kostas, stassa).
@@ -117,6 +129,7 @@ father(vassilis,nikolas).
 father(vassilis,alexandros).
 
 mother(alexandra, kostas).
+mother(alexandra, georgia).
 mother(paraskevi, dora).
 mother(paraskevi, akis).
 mother(dora, stassa).
