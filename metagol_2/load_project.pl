@@ -12,14 +12,14 @@ user:file_search_path(data, project_root(data)).
 :-use_module(src(auxiliaries)).
 
 edit_files:-
-        configuration:metagol_data_file(P)
-        ,edit(load_project)
+        %configuration:metagol_data_file(P)
+        edit(load_project)
         ,edit(configuration)
         ,edit(src(metagol))
         ,edit(src(auxiliaries))
         ,edit('../experiments/learning_rate/scripts/learning_rate.pl')
         ,edit('../experiments/learning_rate/scripts/run_learning_rate.pl')
         ,edit('../experiments/learning_rate/scripts/learning_rate_configuration.pl')
-        ,edit(P)
+        %,edit(P)
 	.
 :-edit_files.
