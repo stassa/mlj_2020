@@ -1,4 +1,5 @@
-:-module(run_learning_rate, [run_kin/0
+:-module(run_learning_rate, [write_dataset/1
+                            ,run_kin/0
                             ,run_mtg_fragment/0
                             ,run_robots/0
                             ]).
@@ -47,8 +48,6 @@ user:file_search_path(learning_rate, experiments(learning_rate)).
 :-use_module(learning_rate).
 :-use_module(learning_rate_configuration).
 :-use_module(lib(mathemancy/mathemancy)).
-% Used to generate primitive moves for grid world navigation dataset
-:-use_module(experiment_data(robots/move_generator)).
 
 % Allow dynamic setting of normally static options in Louise.
 :-dynamic configuration:experiment_file/2.
@@ -204,7 +203,6 @@ setup(D):-
         ,(   D = robots
          ->  set_local_configuration_option(robots,experiment_world,EW)
             ,set_local_configuration_option(robots,world_dimensions,WD)
-            ,move_generator:write_dataset
          ;   true
          )
         ,(   L = louise
@@ -212,42 +210,66 @@ setup(D):-
             ,set_configuration_option(resolutions,S)
             ,set_configuration_option(recursive_reduction,RR)
          ;   L = metagol
-         ->  set_local_configuration_option(metagol,max_clauses,Max_C)
+         ->  set_configuration_option(metagol_data_file,[data(experiment/D)])
+            ,set_local_configuration_option(metagol,max_clauses,Max_C)
             ,set_local_configuration_option(metagol,max_inv_preds,MI)
             ,set_local_configuration_option(metagol,min_clauses,Min_C)
-            ,write_dataset(D)
          ;   format(atom(E),'Unknown learner: ~w',[L])
             ,throw(E)
          ).
 
 
-%!      write_dataset(+Dataset) is det.
+
+%!      write_dataset(+Problem) is det.
 %
-%       Write the metagol dataset for the given er Dataset.
+%       Write the Metagol dataset for the given Problem.
 %
-%       Dataset is the name of a dataset, in particular, the file name
-%       (without extension) of the file defining the MIL problem for the
-%       dataset: one of [kin, robots].
+%       Problem is the name of a dataset representing a MIL problem
+%       defined in an experiment file module in the format expected by
+%       Louise and used in a learning rate experiment. The module name
+%       of the experiment file is the same as Problem and one of: [kin,
+%       robots, mtg_fragment].
 %
-%       Experiment datasets were originally created for Louise. This
-%       predicate initiates their translation to the representation of a
-%       MIL problem required by Metagol.
+%       Experiment files used in the learning rate experiment were
+%       originally created for Louise. This predicate handles their
+%       translation to the representation of a MIL problem required by
+%       Metagol. It first calls setup/1 to set configuration options as
+%       necessary to run the experiment.
+%
+%       The Metagol data file written has the same name as Problem (with
+%       the extension .pl).
 %
 write_dataset(D):-
+        % Mapping of dataset name to learning target.
+        % D is also the module name of the dataset.
         memberchk(D-T,[kin-kin/2
                       ,mtg_fragment-ability/2
                       ,robots-move/2
                       ])
-        ,metagol_data_file(D,_Dir,_Fn,P)
+        % Setup necassary configuration options.
+        ,setup(D)
+        % For the robots problem we need to generate a grid world first.
+        ,(   D == robots
+         ->  use_module('../data/robots/move_generator.pl')
+            ,debug(learning_rate_setup,'Generated grid world.',[])
+            ,move_generator:write_dataset % loaded by robots.pl
+         ;   true
+         )
+        % Only in metagol shim auxiliaries.pl
+        ,auxiliaries:metagol_data_file(D,_Dir,_Fn,OP)
         % Get name of module to print out relative path
         ,module_property(run_learning_rate, file(M))
-        ,(   exists_file(P)
+        ,(   exists_file(OP)
          ->  true
-         ;   relative_file_name(P,M,R)
+         ;   relative_file_name(OP,M,R)
             ,debug(learning_rate_setup,'Did not find dataset ~w',[R])
-            ,write_metagol_dataset(T)
+            % Experiment file path and module name should be written
+            % to the dynamic database by setup/1.
+            ,configuration:experiment_file(IP,D)
+            ,write_metagol_dataset(IP,D,T)
             ,debug(learning_rate_setup,'Wrote dataset ~w',[R])
          ).
+
 
 
 %!      run_kin is det.
