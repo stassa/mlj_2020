@@ -6,9 +6,9 @@
 # on Windows. It is meant to be used to cleanup after testing experiments'
 # setup. It _will_ remove the output of completed experiments _without_
 # warnings. So either a) make sure you backup your experiment outputs in a
-# directory not affected by this script (listed below) or, b) don't run this
-# script when there is data you need in one of the directories or files to be
-# deleted, listed below.
+# directory other than the directories affected by this script (listed below)
+# or, b) don't run this script when there is data you need in one of the
+# directories or files to be deleted, listed below.
 
 $louise_root="../../../louise"
 $metagol_root="../../../metagol"
