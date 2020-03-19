@@ -50,7 +50,8 @@ user:file_search_path(learning_rate, experiments(learning_rate)).
 :-use_module(lib(mathemancy/mathemancy)).
 
 % Allow dynamic setting of normally static options in Louise.
-:-dynamic configuration:experiment_file/2.
+:-dynamic configuration:experiment_file/2
+         ,configuration:minimal_program_size/2.
 
 % Colorise Swi debug messages to make them more readable in
 % dark-coloured terminals (default colouring is too dark).
@@ -97,7 +98,9 @@ config(kin,experiment_file,['../data/kinship/kin.pl',kin]).
 config(kin,copy_plotting_scripts,[learning_rate(plotting)]).
 config(kin,logging_directory,'../experiments/learning_rate/output/kin/').
 config(kin,plotting_directory,'../experiments/learning_rate/output/kin/').
+config(kin,learning_predicate,[learn/5]).
 config(kin,learning_rate_time_limit,[300]).
+config(kin,minimal_program_size,[2,inf]).
 config(kin,reduction,[plotkins]).
 config(kin,resolutions,[5000]).
 config(kin,recursive_reduction,[true]).
@@ -110,7 +113,9 @@ config(mtg_fragment,experiment_file,['../data/mtg/mtg_fragment.pl',mtg_fragment]
 config(mtg_fragment,copy_plotting_scripts,[learning_rate(plotting)]).
 config(mtg_fragment,logging_directory,'../experiments/learning_rate/output/mtg_fragment/').
 config(mtg_fragment,plotting_directory,'../experiments/learning_rate/output/mtg_fragment/').
+config(mtg_fragment,learning_predicate,[learn/5]).
 config(mtg_fragment,learning_rate_time_limit,[300]).
+config(mtg_fragment,minimal_program_size,[2,inf]).
 config(mtg_fragment,depth_limits,[40,0]).
 config(mtg_fragment,reduction,[none]).
 config(mtg_fragment,resolutions,[5000]).
@@ -124,7 +129,9 @@ config(robots,experiment_file,['../data/robots/robots.pl',robots]).
 config(robots,copy_plotting_scripts,[learning_rate(plotting)]).
 config(robots,logging_directory,'../experiments/learning_rate/output/robots/').
 config(robots,plotting_directory,'../experiments/learning_rate/output/robots/').
+config(robots,learning_predicate,[learn/5]).
 config(robots,learning_rate_time_limit,[300]).
+config(robots,minimal_program_size,[2,inf]).
 config(robots,reduction,[plotkins]).
 config(robots,resolutions,[5000]).
 config(robots,recursive_reduction,[true]).
@@ -180,7 +187,9 @@ setup(D):-
         ,config(D,copy_plotting_scripts,CS)
         ,config(D,logging_directory,LD)
         ,config(D,plotting_directory,PD)
+        ,config(D,learning_predicate,LP)
         ,config(D,learning_rate_time_limit,TL)
+        ,config(D,minimal_program_size,MP)
         ,config(D,reduction,R)
         ,config(D,resolutions,S)
         ,config(D,recursive_reduction,RR)
@@ -209,6 +218,8 @@ setup(D):-
          ->  set_configuration_option(reduction,R)
             ,set_configuration_option(resolutions,S)
             ,set_configuration_option(recursive_reduction,RR)
+            ,set_configuration_option(learning_predicate,LP)
+            ,set_configuration_option(minimal_program_size,MP)
          ;   L = metagol
          ->  set_configuration_option(metagol_data_file,[data(experiment/D)])
             ,set_local_configuration_option(metagol,max_clauses,Max_C)
