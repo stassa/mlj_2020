@@ -39,18 +39,15 @@ metarules(kin/2,[chain,tailrec,switch,precon]).
 
 positive_example(kin/2,kin(A,B)):-
 	kin(A,B)
-	%,A \= B
+	,A \= B
 	.
 
 negative_example_(kin/2,_):-
 	false.
-negative_example_(kin/2,kin(A,A)):-
-	kin(A,A).
-
 negative_example(kin/2,kin(A,B)):-
 	individual(A)
 	,individual(B)
-	%,A \= B
+	,A \= B
 	,\+ once(kin(A,B)).
 
 individual(A):-
@@ -58,19 +55,11 @@ individual(A):-
 individual(A):-
 	female(A).
 
-/* Target theory
-kin(A,B):- ancestor(A,B), A \= B.
-kin(A,B):- ancestor(B,A), A \= B.
-kin(A,B):- ancestor(C,A), ancestor(C,B), A \= B.
-kin(A,B):- husband(A,B), A \= B.
-kin(A,B):- wife(A,B), A \= B.
-%kin(A,B):- child(A,B).
-*/
+/* Target theory */
 kin(A,B):- ancestor(A,B).
 kin(A,B):- ancestor(B,A).
 kin(A,B):- ancestor(C,A), ancestor(C,B).
-kin(A,B):- husband(A,B).
-kin(A,B):- wife(A,B).
+kin(A,B):- ancestor(A,C), ancestor(B,C).
 
 
 % Background knowledge.
