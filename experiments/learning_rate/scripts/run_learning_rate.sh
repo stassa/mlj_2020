@@ -8,7 +8,12 @@ cd $louise_root
 
 swipl -s $script -g run_kin -t halt &
 swipl -s $script -g run_mtg_fragment -t halt &
+# Generates the grid world tasks and primitive moves
+swipl -s $script -g 'write_dataset(robots)' -t halt
 swipl -s $script -g run_robots -t halt &
+swipl -s $script -g run_connected_ambiguities -t halt &
+swipl -s $script -g run_connected_false_positives -t halt &
+swipl -s $script -g run_connected_false_negatives -t halt &
 
 cd $to_script_from_learners
 
@@ -17,9 +22,15 @@ cd $metagol_root
 swipl -s $script -g 'write_dataset(kin)' -t halt
 swipl -s $script -g 'write_dataset(mtg_fragment)' -t halt
 swipl -s $script -g 'write_dataset(robots)' -t halt
+swipl -s $script -g 'write_dataset(connected_ambiguities)' -t halt
+swipl -s $script -g 'write_dataset(connected_false_positives)' -t halt
+swipl -s $script -g 'write_dataset(connected_false_negatives)' -t halt
 
 swipl -s $script -g run_kin -t halt &
 swipl -s $script -g run_mtg_fragment -t halt &
 swipl -s $script -g run_robots -t halt &
+swipl -s $script -g run_connected_ambiguities -t halt &
+swipl -s $script -g run_connected_false_positives -t halt &
+swipl -s $script -g run_connected_false_negatives -t halt &
 
 cd $to_script_from_learners

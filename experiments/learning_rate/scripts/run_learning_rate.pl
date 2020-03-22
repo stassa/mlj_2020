@@ -2,6 +2,9 @@
                             ,run_kin/0
                             ,run_mtg_fragment/0
                             ,run_robots/0
+                            ,run_connected_ambiguities/0
+                            ,run_connected_false_positives/0
+                            ,run_connected_false_negatives/0
                             ]).
 
 /** <module> Running script for learning_rate.pl experiment.
@@ -142,6 +145,51 @@ config(robots,min_clauses,[1]).
 % robots/move_generator.pl options
 config(robots,experiment_world,[empty_world]).
 config(robots,world_dimensions,[4,4]).
+/* connected_ambiguities.pl options */
+config(connected_ambiguities,experiment_file,['../data/graph/connected_ambiguities.pl',connected_ambiguities]).
+config(connected_ambiguities,copy_plotting_scripts,[learning_rate(plotting)]).
+config(connected_ambiguities,logging_directory,'../experiments/learning_rate/output/connected_ambiguities/').
+config(connected_ambiguities,plotting_directory,'../experiments/learning_rate/output/connected_ambiguities/').
+config(connected_ambiguities,learning_predicate,[learn/5]).
+config(connected_ambiguities,learning_rate_time_limit,[300]).
+config(connected_ambiguities,minimal_program_size,[2,inf]).
+config(connected_ambiguities,reduction,[plotkins]).
+config(connected_ambiguities,resolutions,[5000]).
+config(connected_ambiguities,recursive_reduction,[true]).
+% Metagol options
+config(connected_ambiguities,max_clauses,[40]).
+config(connected_ambiguities,max_inv_preds,[0]).
+config(connected_ambiguities,min_clauses,[1]).
+/* connected_false_positives.pl options */
+config(connected_false_positives,experiment_file,['../data/graph/connected_false_positives.pl',connected_false_positives]).
+config(connected_false_positives,copy_plotting_scripts,[learning_rate(plotting)]).
+config(connected_false_positives,logging_directory,'../experiments/learning_rate/output/connected_false_positives/').
+config(connected_false_positives,plotting_directory,'../experiments/learning_rate/output/connected_false_positives/').
+config(connected_false_positives,learning_predicate,[learn/5]).
+config(connected_false_positives,learning_rate_time_limit,[300]).
+config(connected_false_positives,minimal_program_size,[2,inf]).
+config(connected_false_positives,reduction,[plotkins]).
+config(connected_false_positives,resolutions,[5000]).
+config(connected_false_positives,recursive_reduction,[true]).
+% Metagol options
+config(connected_false_positives,max_clauses,[40]).
+config(connected_false_positives,max_inv_preds,[0]).
+config(connected_false_positives,min_clauses,[1]).
+/* connected_false_negatives.pl options */
+config(connected_false_negatives,experiment_file,['../data/graph/connected_false_negatives.pl',connected_false_negatives]).
+config(connected_false_negatives,copy_plotting_scripts,[learning_rate(plotting)]).
+config(connected_false_negatives,logging_directory,'../experiments/learning_rate/output/connected_false_negatives/').
+config(connected_false_negatives,plotting_directory,'../experiments/learning_rate/output/connected_false_negatives/').
+config(connected_false_negatives,learning_predicate,[learn/5]).
+config(connected_false_negatives,learning_rate_time_limit,[300]).
+config(connected_false_negatives,minimal_program_size,[2,inf]).
+config(connected_false_negatives,reduction,[plotkins]).
+config(connected_false_negatives,resolutions,[5000]).
+config(connected_false_negatives,recursive_reduction,[true]).
+% Metagol options
+config(connected_false_negatives,max_clauses,[40]).
+config(connected_false_negatives,max_inv_preds,[0]).
+config(connected_false_negatives,min_clauses,[1]).
 
 
 %!      setup(+Dataset) is det.
@@ -256,6 +304,9 @@ write_dataset(D):-
         memberchk(D-T,[kin-kin/2
                       ,mtg_fragment-ability/2
                       ,robots-move/2
+                      ,connected_ambiguities-connected/2
+                      ,connected_false_positives-connected/2
+                      ,connected_false_negatives-connected/2
                       ])
         % Setup necassary configuration options.
         ,setup(D)
@@ -346,6 +397,70 @@ run_robots:-
         ,debug(progress,'~w: Starting on robots dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
         ,debug(progress,'~w: Finished with robots dataset',[L]).
+
+
+
+%!      run_connected_ambiguities is det.
+%
+%       Run experiment on the connected_ambiguities.pl dataset.
+%
+run_connected_ambiguities:-
+        configuration:learner(L)
+        ,once(setup(connected_ambiguities))
+        ,T = connected/2
+        ,M = acc
+        ,K = 100
+        ,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
+        %,K = 5
+        %,interval(1,10,1,Ss)
+        ,debug(progress,'~w: Starting on connected (ambiguities) dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with connected (ambiguities) dataset',[L]).
+
+
+
+%!      run_connected_false_positives is det.
+%
+%       Run experiment on the connected_false_positives.pl dataset.
+%
+run_connected_false_positives:-
+        configuration:learner(L)
+        ,once(setup(connected_false_positives))
+        ,T = connected/2
+        ,M = acc
+        ,K = 100
+        ,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
+        %,K = 5
+        %,interval(1,10,1,Ss)
+        ,debug(progress,'~w: Starting on connected (false positives) dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with connected (false positives) dataset',[L]).
+
+
+
+%!      run_connected_false_negatives is det.
+%
+%       Run experiment on the connected_false_negatives.pl dataset.
+%
+run_connected_false_negatives:-
+        configuration:learner(L)
+        ,once(setup(connected_false_negatives))
+        ,T = connected/2
+        ,M = acc
+        ,K = 100
+        ,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
+        %,K = 5
+        %,interval(1,10,1,Ss)
+        ,debug(progress,'~w: Starting on connected (false negatives) dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with connected (false negatives) dataset',[L]).
+
 
 
 %!      float_interval(+I,+K,+J,-Ss) is det.
