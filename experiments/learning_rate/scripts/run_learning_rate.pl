@@ -1,10 +1,11 @@
-:-module(run_learning_rate, [write_dataset/1
+:-module(run_learning_rate, [generate_dataset/1
+                            ,write_dataset/1
                             ,run_kin/0
                             ,run_mtg_fragment/0
                             ,run_robots/0
-                            ,run_connected_ambiguities/0
-                            ,run_connected_false_positives/0
-                            ,run_connected_false_negatives/0
+                            ,run_path_ambiguities/0
+                            ,run_path_false_positives/0
+                            ,run_path_false_negatives/0
                             ]).
 
 /** <module> Running script for learning_rate.pl experiment.
@@ -55,6 +56,11 @@ user:file_search_path(learning_rate, experiments(learning_rate)).
 % Allow dynamic setting of normally static options in Louise.
 :-dynamic configuration:experiment_file/2
          ,configuration:minimal_program_size/2.
+
+% Allow dynamic setting of normally static path_* experiment file
+% generator options.
+:-dynamic generator_configuration:mislabelling_type/1
+         ,generator_configuration:mislabelling_probability/1.
 
 % Colorise Swi debug messages to make them more readable in
 % dark-coloured terminals (default colouring is too dark).
@@ -145,51 +151,57 @@ config(robots,min_clauses,[1]).
 % robots/move_generator.pl options
 config(robots,experiment_world,[empty_world]).
 config(robots,world_dimensions,[4,4]).
-/* connected_ambiguities.pl options */
-config(connected_ambiguities,experiment_file,['../data/graph/connected_ambiguities.pl',connected_ambiguities]).
-config(connected_ambiguities,copy_plotting_scripts,[learning_rate(plotting)]).
-config(connected_ambiguities,logging_directory,'../experiments/learning_rate/output/connected_ambiguities/').
-config(connected_ambiguities,plotting_directory,'../experiments/learning_rate/output/connected_ambiguities/').
-config(connected_ambiguities,learning_predicate,[learn/5]).
-config(connected_ambiguities,learning_rate_time_limit,[300]).
-config(connected_ambiguities,minimal_program_size,[2,inf]).
-config(connected_ambiguities,reduction,[plotkins]).
-config(connected_ambiguities,resolutions,[5000]).
-config(connected_ambiguities,recursive_reduction,[true]).
+/* path_ambiguities.pl options */
+config(path_ambiguities,experiment_file,['../data/graph/output/path_ambiguities.pl',path_ambiguities]).
+config(path_ambiguities,copy_plotting_scripts,[learning_rate(plotting)]).
+config(path_ambiguities,logging_directory,'../experiments/learning_rate/output/path_ambiguities/').
+config(path_ambiguities,plotting_directory,'../experiments/learning_rate/output/path_ambiguities/').
+config(path_ambiguities,learning_predicate,[learn/5]).
+config(path_ambiguities,learning_rate_time_limit,[300]).
+config(path_ambiguities,minimal_program_size,[2,inf]).
+config(path_ambiguities,reduction,[plotkins]).
+config(path_ambiguities,resolutions,[5000]).
+config(path_ambiguities,recursive_reduction,[true]).
+config(path_ambiguities,mislabelling_type,[ambiguities]).
+config(path_ambiguities,mislabelling_probability,[0.2]).
 % Metagol options
-config(connected_ambiguities,max_clauses,[40]).
-config(connected_ambiguities,max_inv_preds,[0]).
-config(connected_ambiguities,min_clauses,[1]).
-/* connected_false_positives.pl options */
-config(connected_false_positives,experiment_file,['../data/graph/connected_false_positives.pl',connected_false_positives]).
-config(connected_false_positives,copy_plotting_scripts,[learning_rate(plotting)]).
-config(connected_false_positives,logging_directory,'../experiments/learning_rate/output/connected_false_positives/').
-config(connected_false_positives,plotting_directory,'../experiments/learning_rate/output/connected_false_positives/').
-config(connected_false_positives,learning_predicate,[learn/5]).
-config(connected_false_positives,learning_rate_time_limit,[300]).
-config(connected_false_positives,minimal_program_size,[2,inf]).
-config(connected_false_positives,reduction,[plotkins]).
-config(connected_false_positives,resolutions,[5000]).
-config(connected_false_positives,recursive_reduction,[true]).
+config(path_ambiguities,max_clauses,[40]).
+config(path_ambiguities,max_inv_preds,[0]).
+config(path_ambiguities,min_clauses,[1]).
+/* path_false_positives.pl options */
+config(path_false_positives,experiment_file,['../data/graph/output/path_false_positives.pl',path_false_positives]).
+config(path_false_positives,copy_plotting_scripts,[learning_rate(plotting)]).
+config(path_false_positives,logging_directory,'../experiments/learning_rate/output/path_false_positives/').
+config(path_false_positives,plotting_directory,'../experiments/learning_rate/output/path_false_positives/').
+config(path_false_positives,learning_predicate,[learn/5]).
+config(path_false_positives,learning_rate_time_limit,[300]).
+config(path_false_positives,minimal_program_size,[2,inf]).
+config(path_false_positives,reduction,[plotkins]).
+config(path_false_positives,resolutions,[5000]).
+config(path_false_positives,recursive_reduction,[true]).
+config(path_false_positives,mislabelling_type,[false_positives]).
+config(path_false_positives,mislabelling_probability,[0.2]).
 % Metagol options
-config(connected_false_positives,max_clauses,[40]).
-config(connected_false_positives,max_inv_preds,[0]).
-config(connected_false_positives,min_clauses,[1]).
-/* connected_false_negatives.pl options */
-config(connected_false_negatives,experiment_file,['../data/graph/connected_false_negatives.pl',connected_false_negatives]).
-config(connected_false_negatives,copy_plotting_scripts,[learning_rate(plotting)]).
-config(connected_false_negatives,logging_directory,'../experiments/learning_rate/output/connected_false_negatives/').
-config(connected_false_negatives,plotting_directory,'../experiments/learning_rate/output/connected_false_negatives/').
-config(connected_false_negatives,learning_predicate,[learn/5]).
-config(connected_false_negatives,learning_rate_time_limit,[300]).
-config(connected_false_negatives,minimal_program_size,[2,inf]).
-config(connected_false_negatives,reduction,[plotkins]).
-config(connected_false_negatives,resolutions,[5000]).
-config(connected_false_negatives,recursive_reduction,[true]).
+config(path_false_positives,max_clauses,[40]).
+config(path_false_positives,max_inv_preds,[0]).
+config(path_false_positives,min_clauses,[1]).
+/* path_false_negatives.pl options */
+config(path_false_negatives,experiment_file,['../data/graph/output/path_false_negatives.pl',path_false_negatives]).
+config(path_false_negatives,copy_plotting_scripts,[learning_rate(plotting)]).
+config(path_false_negatives,logging_directory,'../experiments/learning_rate/output/path_false_negatives/').
+config(path_false_negatives,plotting_directory,'../experiments/learning_rate/output/path_false_negatives/').
+config(path_false_negatives,learning_predicate,[learn/5]).
+config(path_false_negatives,learning_rate_time_limit,[300]).
+config(path_false_negatives,minimal_program_size,[2,inf]).
+config(path_false_negatives,reduction,[plotkins]).
+config(path_false_negatives,resolutions,[5000]).
+config(path_false_negatives,recursive_reduction,[true]).
+config(path_false_negatives,mislabelling_type,[false_negatives]).
+config(path_false_negatives,mislabelling_probability,[0.2]).
 % Metagol options
-config(connected_false_negatives,max_clauses,[40]).
-config(connected_false_negatives,max_inv_preds,[0]).
-config(connected_false_negatives,min_clauses,[1]).
+config(path_false_negatives,max_clauses,[40]).
+config(path_false_negatives,max_inv_preds,[0]).
+config(path_false_negatives,min_clauses,[1]).
 
 
 %!      setup(+Dataset) is det.
@@ -278,6 +290,47 @@ setup(D):-
          ).
 
 
+%!      generate_dataset(+Dataset) is det.
+%
+%       Generate a Louise Dataset or adjuct data file.
+%
+%       The Grid world dataset requires navigation tasks and primitive
+%       moves to be generated before an experiment can be performed. The
+%       path_* datasets' experiment files are entirely automatically
+%       generated and this also must be done before an experiment can be
+%       performed. This prediate takes care of that generation.
+%
+%       Dataset should be one of: [robots, path_ambiguities,
+%       path_false_positives, path_false_negatives], which should be
+%       self-explanatory.
+%
+generate_dataset(robots):-
+        !
+       ,use_module('../data/robots/move_generator.pl')
+       ,debug(learning_rate_setup,'Generated grid world.',[])
+       ,move_generator:write_dataset.
+generate_dataset(D):-
+        (   memberchk(D, [path_ambiguities
+                         ,path_false_positives
+                         ,path_false_negatives
+                       ])
+         ->  use_module('../data/graph/generator.pl')
+            ,config(D,mislabelling_type,T)
+            ,config(D,mislabelling_probability,P)
+            ,set_local_configuration_option(generator_configuration,mislabelling_type,T)
+            ,set_local_configuration_option(generator_configuration
+                                           ,mislabelling_probability,P)
+            ,path_generator:write_dataset
+            ,debug(learning_rate_setup, 'Generated ~w experiment file.', [D])
+         )
+        ,!.
+generate_dataset(D):-
+        \+ memberchk(D, [path_ambiguities
+                        ,path_false_positives
+                        ,path_false_negatives
+                        ])
+        ,debug(learning_rate_setup, 'No experiment dataset to generate.', []).
+
 
 %!      write_dataset(+Problem) is det.
 %
@@ -298,25 +351,23 @@ setup(D):-
 %       The Metagol data file written has the same name as Problem (with
 %       the extension .pl).
 %
+write_dataset(_D):-
+% Metagol dataset only needs to be written if metagol is the learner.
+% Er, duh.
+        configuration:learner(louise)
+        ,!.
 write_dataset(D):-
         % Mapping of dataset name to learning target.
         % D is also the module name of the dataset.
         memberchk(D-T,[kin-kin/2
                       ,mtg_fragment-ability/2
                       ,robots-move/2
-                      ,connected_ambiguities-connected/2
-                      ,connected_false_positives-connected/2
-                      ,connected_false_negatives-connected/2
+                      ,path_ambiguities-path_ambiguities/2
+                      ,path_false_positives-path_false_positives/2
+                      ,path_false_negatives-path_false_negatives/2
                       ])
         % Setup necassary configuration options.
         ,setup(D)
-        % For the robots problem we need to generate a grid world first.
-        ,(   D == robots
-         ->  use_module('../data/robots/move_generator.pl')
-            ,debug(learning_rate_setup,'Generated grid world.',[])
-            ,move_generator:write_dataset % loaded by robots.pl
-         ;   true
-         )
         % Only in metagol shim auxiliaries.pl
         ,auxiliaries:metagol_data_file(D,_Dir,_Fn,OP)
         % Get name of module to print out relative path
@@ -400,14 +451,14 @@ run_robots:-
 
 
 
-%!      run_connected_ambiguities is det.
+%!      run_path_ambiguities is det.
 %
-%       Run experiment on the connected_ambiguities.pl dataset.
+%       Run experiment on the path_ambiguities.pl dataset.
 %
-run_connected_ambiguities:-
+run_path_ambiguities:-
         configuration:learner(L)
-        ,once(setup(connected_ambiguities))
-        ,T = connected/2
+        ,once(setup(path_ambiguities))
+        ,T = path_ambiguities/2
         ,M = acc
         ,K = 100
         ,float_interval(1,9,1,Ss)
@@ -415,20 +466,20 @@ run_connected_ambiguities:-
         % Comment the two lines above, first!
         %,K = 5
         %,interval(1,10,1,Ss)
-        ,debug(progress,'~w: Starting on connected (ambiguities) dataset',[L])
+        ,debug(progress,'~w: Starting on path (ambiguities) dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
-        ,debug(progress,'~w: Finished with connected (ambiguities) dataset',[L]).
+        ,debug(progress,'~w: Finished with path (ambiguities) dataset',[L]).
 
 
 
-%!      run_connected_false_positives is det.
+%!      run_path_false_positives is det.
 %
-%       Run experiment on the connected_false_positives.pl dataset.
+%       Run experiment on the path_false_positives.pl dataset.
 %
-run_connected_false_positives:-
+run_path_false_positives:-
         configuration:learner(L)
-        ,once(setup(connected_false_positives))
-        ,T = connected/2
+        ,once(setup(path_false_positives))
+        ,T = path_false_positives/2
         ,M = acc
         ,K = 100
         ,float_interval(1,9,1,Ss)
@@ -436,20 +487,20 @@ run_connected_false_positives:-
         % Comment the two lines above, first!
         %,K = 5
         %,interval(1,10,1,Ss)
-        ,debug(progress,'~w: Starting on connected (false positives) dataset',[L])
+        ,debug(progress,'~w: Starting on path (false positives) dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
-        ,debug(progress,'~w: Finished with connected (false positives) dataset',[L]).
+        ,debug(progress,'~w: Finished with path (false positives) dataset',[L]).
 
 
 
-%!      run_connected_false_negatives is det.
+%!      run_path_false_negatives is det.
 %
-%       Run experiment on the connected_false_negatives.pl dataset.
+%       Run experiment on the path_false_negatives.pl dataset.
 %
-run_connected_false_negatives:-
+run_path_false_negatives:-
         configuration:learner(L)
-        ,once(setup(connected_false_negatives))
-        ,T = connected/2
+        ,once(setup(path_false_negatives))
+        ,T = path_false_negatives/2
         ,M = acc
         ,K = 100
         ,float_interval(1,9,1,Ss)
@@ -457,9 +508,9 @@ run_connected_false_negatives:-
         % Comment the two lines above, first!
         %,K = 5
         %,interval(1,10,1,Ss)
-        ,debug(progress,'~w: Starting on connected (false negatives) dataset',[L])
+        ,debug(progress,'~w: Starting on path (false negatives) dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
-        ,debug(progress,'~w: Finished with connected (false negatives) dataset',[L]).
+        ,debug(progress,'~w: Finished with path (false negatives) dataset',[L]).
 
 
 

@@ -21,9 +21,11 @@ metagol_output="$metagol_root/output"
 metagol_experiment_data="$metagol_root/data/experiment"
 experiment_output="$experiment_root/output/"
 robots_world="$data_root/robots/worlds/"
+path_output="$data_root/graph/output/"
 
 rm -rf "$louise_output/testing"
 rm -rf "$metagol_output/testing"
 rm -rf $metagol_experiment_data
 rm -rf $experiment_output
 rm -rf "$robots_world*.pl"
+rm -rf "$path_output/*.pl"

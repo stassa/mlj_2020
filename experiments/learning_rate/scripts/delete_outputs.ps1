@@ -21,6 +21,7 @@ $metagol_output="$metagol_root/output"
 $metagol_experiment_data="$metagol_root/data/experiment"
 $experiment_output="$experiment_root/output/"
 $robots_world="$data_root/robots/worlds/"
+$path_output="$data_root/graph/output/"
 
 # Uncomment the -WhatIf parameters to do a dry run.
 if (Test-Path "$louise_output/testing")
@@ -46,4 +47,9 @@ if (Test-Path $experiment_output)
 if (Test-Path "$robots_world/*.pl")
 {
 	Remove-Item "$robots_world/*.pl" #-WhatIf
+}
+
+if (Test-Path "$path_output/*.pl")
+{
+	Remove-Item "$path_output/*.pl" #-WhatIf
 }
