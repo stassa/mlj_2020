@@ -33,9 +33,9 @@ background_knowledge([ancestor/2
 %       Used to add metarule declarations to experiment files for
 %       generated conneced/2 MIL problerms.
 %
-metarules([chain,tailrec,precon]).
+metarules([identity,inverse,switch,swap]).
+%metarules([chain,tailrec,precon]).
 %metarules([chain,tailrec,switch,precon]).
-%metarules([identity,inverse,swap]).
 
 
 %!      mislabelling_probability(?Probability) is semidet.
@@ -49,9 +49,11 @@ mislabelling_probability(0.2).
 %
 %       Type of mislabelled examples in generated dataset.
 %
-%       One of: [ambiguities, false_positives, false_negatives].
+%       One of: [no_noise, ambiguities, false_positives,
+%       false_negatives].
 %
-mislabelling_type(ambiguities).
+mislabelling_type(no_noise).
+%mislabelling_type(ambiguities).
 %mislabelling_type(false_positives).
 %mislabelling_type(false_negatives).
 

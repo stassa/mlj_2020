@@ -101,6 +101,11 @@ init_output_dir:-
 %
 %       Where A is the arity of the target predicate.
 %
+generate_examples(no_noise,_P,T,Pos,Neg):-
+        !
+        ,positive_examples(Pos_)
+        ,negative_examples(Neg_)
+        ,maplist(rename_examples,[T,T],[Pos_,Neg_],[Pos,Neg]).
 generate_examples(ambiguities,P,T,Pos,Neg):-
         !
         ,generate_ambiguities(P,Pos_,Neg_)
@@ -326,6 +331,10 @@ write_terms(S,As):-
 %	K = 9.
 %       ==
 %
+generate_ambiguities(0,Pos,Neg):-
+        !
+        ,positive_examples(Pos)
+        ,negative_examples(Neg).
 generate_ambiguities(P,Pos,Neg):-
         positive_examples(Pos_Es)
         ,negative_examples(Neg_Es)
@@ -381,6 +390,10 @@ generate_ambiguities(P,Pos,Neg):-
 %	J = 0.
 %       ==
 %
+generate_false_negatives(0,Pos,Neg):-
+        !
+        ,positive_examples(Pos)
+        ,negative_examples(Neg).
 generate_false_negatives(P,Pos,Neg):-
         positive_examples(True_Pos)
         ,negative_examples(True_Neg)
@@ -395,6 +408,10 @@ generate_false_negatives(P,Pos,Neg):-
 %
 %       Generate Positive and Negative examples with false positives.
 %
+generate_false_positives(0,Pos,Neg):-
+        !
+        ,positive_examples(Pos)
+        ,negative_examples(Neg).
 generate_false_positives(P,Pos,Neg):-
         positive_examples(True_Pos)
         ,negative_examples(True_Neg)
