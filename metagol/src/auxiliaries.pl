@@ -99,7 +99,6 @@ hypotheses_union(Pos,Neg,BK,MS,Us):-
                          ,Hs_)
                  ,sort(Hs_, Hs_s)
                  ,debug_clauses(metagol,'Learned new hypothesis:',Hs_s)
-                 ,nl
                  )
                 ,Ps)
         ,sort(Ps,Ps_)
