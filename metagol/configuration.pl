@@ -121,14 +121,13 @@ learner(metagol).
 %
 :-dynamic learning_predicate/1.
 :-multifile learning_predicate/1.
-learning_predicate(hypotheses_union/5).
 
 
 %!      max_clauses(?Max) is semidet.
 %
 %       Metagol option: maximum hypothesis cardinality.
 %
-metagol:max_clauses(4).
+metagol:max_clauses(10).
 
 
 %!      max_inv_preds(?Max) is semidet.
@@ -157,7 +156,7 @@ metagol_data_directory(data(experiment)).
 %       Path to the current Metagol data file.
 %
 %metagol_data_file(data(examples/tiny_kinship)).
-metagol_data_file(data(experiment/kin)).
+%metagol_data_file(data(experiment/kin)).
 %metagol_data_file(data(experiment/mtg_fragment)).
 %metagol_data_file(data(experiment/robots)).
 %metagol_data_file(data(experiment/path_no_noise)).
