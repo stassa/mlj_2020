@@ -18,6 +18,7 @@ $metagol_root="../../../metagol"
 # Generate grid world tasks and primitive moves for grid world experiement and
 # auto-generated datasets for graph-connectedness experiments.
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'generate_dataset(robots)' -t halt
+& 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'generate_dataset(path_no_noise)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'generate_dataset(path_ambiguities)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'generate_dataset(path_false_positives)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'generate_dataset(path_false_negatives)' -t halt
@@ -26,6 +27,7 @@ $metagol_root="../../../metagol"
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_kin -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_mtg_fragment -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_robots -t halt
+& 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_no_noise -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_ambiguities -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_false_positives -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_false_negatives -t halt
@@ -39,6 +41,7 @@ $metagol_root="../../../metagol"
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(kin)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(mtg_fragment)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(robots)' -t halt
+& 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(path_no_noise)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(path_ambiguities)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(path_false_positives)' -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g 'write_dataset(path_false_negatives)' -t halt
@@ -47,6 +50,7 @@ $metagol_root="../../../metagol"
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_kin -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_mtg_fragment -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_robots -t halt
+& 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_no_noise -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_ambiguities -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_false_positives -t halt
 & 'C:\Program Files\swipl\bin\swipl.exe' -s $script -g run_path_false_negatives -t halt

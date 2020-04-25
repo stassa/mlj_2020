@@ -20,6 +20,7 @@ cd $louise_root
 # Generate grid world tasks and primitive moves for grid world experiement and
 # auto-generated datasets for graph-connectedness experiments.
 swipl -s $script -g 'generate_dataset(robots)' -t halt
+swipl -s $script -g 'generate_dataset(path_no_noise)' -t halt
 swipl -s $script -g 'generate_dataset(path_ambiguities)' -t halt
 swipl -s $script -g 'generate_dataset(path_false_positives)' -t halt
 swipl -s $script -g 'generate_dataset(path_false_negatives)' -t halt
@@ -28,6 +29,7 @@ swipl -s $script -g 'generate_dataset(path_false_negatives)' -t halt
 swipl -s $script -g run_kin -t halt &
 swipl -s $script -g run_mtg_fragment -t halt &
 swipl -s $script -g run_robots -t halt &
+swipl -s $script -g run_path_no_noise -t halt &
 swipl -s $script -g run_path_ambiguities -t halt &
 swipl -s $script -g run_path_false_positives -t halt &
 swipl -s $script -g run_path_false_negatives -t halt &
@@ -41,6 +43,7 @@ cd $metagol_root
 swipl -s $script -g 'write_dataset(kin)' -t halt
 swipl -s $script -g 'write_dataset(mtg_fragment)' -t halt
 swipl -s $script -g 'write_dataset(robots)' -t halt
+swipl -s $script -g 'write_dataset(path_no_noise)' -t halt
 swipl -s $script -g 'write_dataset(path_ambiguities)' -t halt
 swipl -s $script -g 'write_dataset(path_false_positives)' -t halt
 swipl -s $script -g 'write_dataset(path_false_negatives)' -t halt
@@ -49,6 +52,7 @@ swipl -s $script -g 'write_dataset(path_false_negatives)' -t halt
 swipl -s $script -g run_kin -t halt &
 swipl -s $script -g run_mtg_fragment -t halt &
 swipl -s $script -g run_robots -t halt &
+swipl -s $script -g run_path_no_noise -t halt &
 swipl -s $script -g run_path_ambiguities -t halt &
 swipl -s $script -g run_path_false_positives -t halt &
 swipl -s $script -g run_path_false_negatives -t halt &

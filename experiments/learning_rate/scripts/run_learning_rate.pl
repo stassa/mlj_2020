@@ -3,6 +3,7 @@
                             ,run_kin/0
                             ,run_mtg_fragment/0
                             ,run_robots/0
+                            ,run_path_no_noise/0
                             ,run_path_ambiguities/0
                             ,run_path_false_positives/0
                             ,run_path_false_negatives/0
@@ -151,6 +152,23 @@ config(robots,min_clauses,[1]).
 % robots/move_generator.pl options
 config(robots,experiment_world,[empty_world]).
 config(robots,world_dimensions,[4,4]).
+/* path_no_noise.pl options */
+config(path_no_noise,experiment_file,['../data/graph/output/path_no_noise.pl',path_no_noise]).
+config(path_no_noise,copy_plotting_scripts,[learning_rate(plotting)]).
+config(path_no_noise,logging_directory,'../experiments/learning_rate/output/path_no_noise/').
+config(path_no_noise,plotting_directory,'../experiments/learning_rate/output/path_no_noise/').
+config(path_no_noise,learning_predicate,[learn/5]).
+config(path_no_noise,learning_rate_time_limit,[300]).
+config(path_no_noise,minimal_program_size,[2,inf]).
+config(path_no_noise,reduction,[plotkins]).
+config(path_no_noise,resolutions,[5000]).
+config(path_no_noise,recursive_reduction,[true]).
+config(path_no_noise,mislabelling_type,[no_noise]).
+config(path_no_noise,mislabelling_probability,[0.2]).
+% Metagol options
+config(path_no_noise,max_clauses,[40]).
+config(path_no_noise,max_inv_preds,[0]).
+config(path_no_noise,min_clauses,[1]).
 /* path_ambiguities.pl options */
 config(path_ambiguities,experiment_file,['../data/graph/output/path_ambiguities.pl',path_ambiguities]).
 config(path_ambiguities,copy_plotting_scripts,[learning_rate(plotting)]).
@@ -310,7 +328,8 @@ generate_dataset(robots):-
        ,debug(learning_rate_setup,'Generated grid world.',[])
        ,move_generator:write_dataset.
 generate_dataset(D):-
-        (   memberchk(D, [path_ambiguities
+        (   memberchk(D, [path_no_noise
+                         ,path_ambiguities
                          ,path_false_positives
                          ,path_false_negatives
                        ])
@@ -325,7 +344,9 @@ generate_dataset(D):-
          )
         ,!.
 generate_dataset(D):-
-        \+ memberchk(D, [path_ambiguities
+        \+ memberchk(D, [robots
+                        ,path_no_noise
+                        ,path_ambiguities
                         ,path_false_positives
                         ,path_false_negatives
                         ])
@@ -362,6 +383,7 @@ write_dataset(D):-
         memberchk(D-T,[kin-kin/2
                       ,mtg_fragment-ability/2
                       ,robots-move/2
+                      ,path_no_noise-path_no_noise/2
                       ,path_ambiguities-path_ambiguities/2
                       ,path_false_positives-path_false_positives/2
                       ,path_false_negatives-path_false_negatives/2
@@ -448,6 +470,27 @@ run_robots:-
         ,debug(progress,'~w: Starting on robots dataset',[L])
         ,learning_rate(T,M,K,Ss,_Ms,_SDs)
         ,debug(progress,'~w: Finished with robots dataset',[L]).
+
+
+
+%!      run_path_no_noise is det.
+%
+%       Run experiment on the path_no_noise.pl dataset.
+%
+run_path_no_noise:-
+        configuration:learner(L)
+        ,once(setup(path_no_noise))
+        ,T = path_no_noise/2
+        ,M = acc
+        ,K = 100
+        ,float_interval(1,9,1,Ss)
+        % Uncomment the following two lines to test experiment setup.
+        % Comment the two lines above, first!
+        %,K = 5
+        %,interval(1,10,1,Ss)
+        ,debug(progress,'~w: Starting on path (no noise) dataset',[L])
+        ,learning_rate(T,M,K,Ss,_Ms,_SDs)
+        ,debug(progress,'~w: Finished with path (no noise) dataset',[L]).
 
 
 
