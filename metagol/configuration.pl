@@ -121,13 +121,14 @@ learner(metagol).
 %
 :-dynamic learning_predicate/1.
 :-multifile learning_predicate/1.
+learning_predicate(hypotheses_union/5).
 
 
 %!      max_clauses(?Max) is semidet.
 %
 %       Metagol option: maximum hypothesis cardinality.
 %
-metagol:max_clauses(10).
+metagol:max_clauses(4).
 
 
 %!      max_inv_preds(?Max) is semidet.
@@ -156,9 +157,10 @@ metagol_data_directory(data(experiment)).
 %       Path to the current Metagol data file.
 %
 %metagol_data_file(data(examples/tiny_kinship)).
-%metagol_data_file(data(experiment/kin)).
+metagol_data_file(data(experiment/kin)).
 %metagol_data_file(data(experiment/mtg_fragment)).
 %metagol_data_file(data(experiment/robots)).
+%metagol_data_file(data(experiment/path_no_noise)).
 
 
 %!      named_metarule(?Name, ?Metarule) is semidet.
@@ -178,6 +180,7 @@ named_metarule(tailrec, metarule([P,Q], [P,X,Y], [[Q,X,Z],[P,Z,Y]])).
 named_metarule(precon, metarule([P,Q,R], [P,X,Y], [[Q,X],[R,X,Y]])).
 named_metarule(postcon, metarule([P,Q,R], [P,X,Y], [[Q,X,Y],[R,Y]])).
 named_metarule(switch, metarule([P,Q,R], [P,X,Y], [[Q,X,Z],[R,Y,Z]])).
+named_metarule(swap, metarule([P,Q,R], [P,X,Y], [[Q,Z,X],[R,Z,Y]])).
 named_metarule(leftrec, metarule([P,Q], [P,X,Y], [[P,X,Z],[Q,Z,Y]])).
 named_metarule(allrec, metarule([P], [P,X,Y], [[P,X,Z],[P,Z,Y]])).
 named_metarule(chain_abduce_x, metarule([P,Q,R,X], [P,X,Y], [[Q,X,Z],[R,Z,Y]])).
