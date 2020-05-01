@@ -28,4 +28,4 @@ rm -rf "$metagol_output/testing"
 rm -rf $metagol_experiment_data
 rm -rf $experiment_output
 rm -rf "$robots_world*.pl"
-rm -rf "$path_output*.pl"
+rm -rf "$path_output"
