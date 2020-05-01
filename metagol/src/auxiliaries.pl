@@ -1,7 +1,5 @@
 :-module(auxiliaries, [learn/1
                       ,learn/5
-                      ,hypotheses_union/2
-                      ,hypotheses_union/5
                       ,experiment_data/5
                       ,learning_targets/1
                       ,cleanup_experiment/0
@@ -72,38 +70,6 @@ learn(Pos,Neg,_BK,_MS,Ps):-
         maplist(metagol:metasub_to_clause,Prog3,Ps).
 learn(_Pos,_Neg,_BK,_MS,[]).
 
-
-
-%!      hypotheses_union(+Target, -Union) is det.
-%
-%       Construct the Union of a set of Metagol's hypotheses.
-%
-hypotheses_union(T,Us):-
-        experiment_data(T,Pos,Neg,BK,MS)
-        ,hypotheses_union(Pos,Neg,BK,MS,Us).
-
-
-
-%!      hypotheses_union(+Pos,+Neg,+BK,+Metarules,-Union) is det.
-%
-%       Construct the Union of Metagol's hypotheses for a MIL Problem.
-%
-hypotheses_union(Pos,Neg,BK,MS,Us):-
-        findall(Hs_s
-                ,(learn(Pos,Neg,BK,MS,Hs)
-                 ,Hs \= []
-                 ,findall(C
-                         ,(member(C,Hs)
-                          ,numbervars(C)
-                          )
-                         ,Hs_)
-                 ,sort(Hs_, Hs_s)
-                 ,debug_clauses(metagol,'Learned new hypothesis:',Hs_s)
-                 )
-                ,Ps)
-        ,sort(Ps,Ps_)
-        ,ord_union(Ps_,Us_)
-        ,varnumbers(Us_, Us).
 
 
 
