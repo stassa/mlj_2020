@@ -15,14 +15,14 @@
 %       files for generated conneced/2 MIL problerms.
 %
 background_knowledge([ancestor/2
-                     ,parent/2
-                     ,child/2
-                     ,blue_child/2
-                     ,red_child/2
-                     ,blue_parent/2
-                     ,red_parent/2
-                     ,blue/1
-                     ,red/1
+                     %,parent/2
+                     %,child/2
+                     %,blue_child/2
+                     %,red_child/2
+                     %,blue_parent/2
+                     %,red_parent/2
+                     %,blue/1
+                     %,red/1
                      ]).
 
 

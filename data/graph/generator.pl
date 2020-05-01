@@ -49,8 +49,9 @@ write_dataset(L,P):-
         ,generate_examples(L,P,Bn,Pos,Neg)
         ,file_name_extension(Bn,'.pl',Fn)
         ,directory_file_path(Root,Fn,Path)
+        ,exported_predicates(BK,Es)
         ,Set = open(Path,write,S,[alias(path)])
-        ,G = (write_module_header(S,Bn,BK)
+        ,G = (write_module_header(S,Bn,Es)
              ,write_bk_declaration(S,Bn/A,BK)
              ,write_metarules_declaration(S,Bn/A,IDs)
              ,write_positive_examples(S,Bn/A,Pos)
@@ -136,6 +137,43 @@ rename_examples(T,Es,Es_T):-
                 ,E_ =.. [T|As]
                 )
                ,Es_T).
+
+
+%!      exported_predicates(+BK,-Exported) is det.
+%
+%       Collect predicates Exported by the experiment file module.
+%
+%       BK is the set of predicate symbols and arities of predicates
+%       declared as background knowledge in background_knowledge/1 in
+%       generator_configuration.pl.
+%
+%       Exported is a list including the predicates in BK and the
+%       predicate symbols of predicates in the transitive closure of
+%       predicates in BK and sorted to the standard order of terms. In
+%       other words, Exported is the set of predicate symbols
+%       and arities of the background knowledge and the predicates
+%       called by the background knowledge.
+%
+%       The latter kind of predicate is necessary to be exported
+%       by the experiment file module because louise expects to find its
+%       definition in the module user. write_bk_definitions/2, the
+%       generator predicate that writes the background knowledge to the
+%       generated experiment file, ensures that those predicates'
+%       definitions are added to the generated experiment file.
+%
+exported_predicates(BK,Es):-
+        closure(BK,path_generator,Ps)
+        ,findall(F/A
+                ,(member([C|_Cs],Ps)
+                 ,(   C = (H :- _B)
+                  ->  functor(H,F,A)
+                  ;   functor(C,F,A)
+                  )
+                 ,\+ memberchk(F/A, BK)
+                 )
+                ,Ss)
+        ,append(BK,Ss,Es_)
+        ,sort(Es_,Es).
 
 
 %!      write_module_header(+Stream,+Module,+Exports) is det.
