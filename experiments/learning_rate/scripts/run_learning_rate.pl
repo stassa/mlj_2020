@@ -164,7 +164,7 @@ config(path_no_noise,reduction,[plotkins]).
 config(path_no_noise,resolutions,[5000]).
 config(path_no_noise,recursive_reduction,[true]).
 config(path_no_noise,mislabelling_type,[no_noise]).
-config(path_no_noise,mislabelling_probability,[0.2]).
+config(path_no_noise,mislabelling_probability,[0.0]).
 % Metagol options
 config(path_no_noise,max_clauses,[40]).
 config(path_no_noise,max_inv_preds,[0]).
