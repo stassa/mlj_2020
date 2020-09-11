@@ -15,7 +15,6 @@
 		       ,target_creature_type/2
 		       ,target_enchantment_type/2
 		       ,target_land_type/2
-		       ,target_basic_land_type/2
 		       ,target_planeswalker_type/2
 
 		       ,all_permanents_of_type/2
@@ -31,7 +30,6 @@
 		       ,all_of_creature_type/2
 		       ,all_of_enchantment_type/2
 		       ,all_of_land_type/2
-		       ,all_of_basic_land_type/2
 		       ,all_of_planeswalker_type/2
 
 		       ,all/2
@@ -102,7 +100,6 @@ background_knowledge(ability/2, [destroy_verb/2
 				,target_creature_type/2
 				,target_enchantment_type/2
 				,target_land_type/2
-				,target_basic_land_type/2
 				,target_planeswalker_type/2
 
 				,all_permanents_of_type/2
@@ -111,14 +108,12 @@ background_knowledge(ability/2, [destroy_verb/2
 				,creature_type/2
 				,enchantment_type/2
 				,land_type/2
-				,basic_land_type/2
 				,planeswalker_type/2
 
 				,all_of_artifact_type/2
 				,all_of_creature_type/2
 				,all_of_enchantment_type/2
 				,all_of_land_type/2
-				,all_of_basic_land_type/2
 				,all_of_planeswalker_type/2
 
 				,all/2
@@ -127,7 +122,6 @@ background_knowledge(ability/2, [destroy_verb/2
 				,creature_types/2
 				,enchantment_types/2
 				,land_types/2
-				,basic_land_types/2
 				,planeswalker_types/2
 
 				,a_permanent_type/2
@@ -199,28 +193,24 @@ ability --> destroy_verb, target_artifact_type.
 ability --> destroy_verb, target_creature_type.
 ability --> destroy_verb, target_enchantment_type.
 ability --> destroy_verb, target_land_type.
-ability --> destroy_verb, target_basic_land_type.
 ability --> destroy_verb, target_planeswalker_type.
 
 ability --> exile_verb, target_artifact_type.
 ability --> exile_verb, target_creature_type.
 ability --> exile_verb, target_enchantment_type.
 ability --> exile_verb, target_land_type.
-ability --> exile_verb, target_basic_land_type.
 ability --> exile_verb, target_planeswalker_type.
 
 ability --> destroy_verb, all_of_artifact_type.
 ability --> destroy_verb, all_of_creature_type.
 ability --> destroy_verb, all_of_enchantment_type.
 ability --> destroy_verb, all_of_land_type.
-ability --> destroy_verb, all_of_basic_land_type.
 ability --> destroy_verb, all_of_planeswalker_type.
 
 ability --> exile_verb, all_of_artifact_type.
 ability --> exile_verb, all_of_creature_type.
 ability --> exile_verb, all_of_enchantment_type.
 ability --> exile_verb, all_of_land_type.
-ability --> exile_verb, all_of_basic_land_type.
 ability --> exile_verb, all_of_planeswalker_type.
 
 ability --> return_verb, target_from_battlefield_to_hand.
@@ -253,14 +243,12 @@ target_artifact_type --> target, artifact_type.
 target_creature_type --> target, creature_type.
 target_enchantment_type --> target, enchantment_type.
 target_land_type --> target, land_type.
-target_basic_land_type --> target, basic_land_type.
 target_planeswalker_type --> target, planeswalker_type.
 
 all_of_artifact_type --> all, artifact_types.
 all_of_creature_type --> all, creature_types.
 all_of_enchantment_type --> all, enchantment_types.
 all_of_land_type --> all, land_types.
-all_of_basic_land_type --> all, basic_land_types.
 all_of_planeswalker_type --> all, planeswalker_types.
 
 all --> [all].
@@ -857,32 +845,24 @@ enchantment_types --> ['Sagas'].
 enchantment_types --> ['Shrines'].
 
 % See rule 205.3i
+land_type --> basic_land_type.
 land_type --> ['Desert'].
-land_type --> ['Forest'].
 land_type --> ['Gate'].
-land_type --> ['Island'].
 land_type --> ['Lair'].
 land_type --> ['Locus'].
 land_type --> ['Mine'].
-land_type --> ['Mountain'].
-land_type --> ['Plains'].
 land_type --> ['Power-Plant'].
-land_type --> ['Swamp'].
 land_type --> ['Tower'].
 land_type --> ['Urza’s'].
 
 % My plurals
+land_types --> basic_land_types.
 land_types --> ['Deserts'].
-land_types --> ['Forests'].
 land_types --> ['Gates'].
-land_types --> ['Islands'].
 land_types --> ['Lairs'].
 land_types --> ['Loci'].
 land_types --> ['Mines'].
-land_types --> ['Mountains'].
-land_types --> ['Plains'].
 land_types --> ['Power-Plants'].
-land_types --> ['Swamps'].
 land_types --> ['Towers'].
 land_types --> ['Urza’s'].
 
