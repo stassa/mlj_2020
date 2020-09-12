@@ -1,6 +1,3 @@
 [submodule "thelma"]
 	path = thelma
 	url = https://github.com/stassa/thelma.git
-[submodule "louise"]
-	path = louise
-	url = https://github.com/stassa/louise.git
