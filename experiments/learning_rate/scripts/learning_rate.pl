@@ -325,6 +325,29 @@ learning_rate(T,M,K,Ss,Ms,SDs):-
 %	each sub-list is the lits of values of the chosen Metric for
 %	the corresponding Sample size.
 %
+learning_rate(T,Lr,L,[Pos,Neg,BK,MS],time,K,Ss,Rs):-
+	!
+	,findall(Vs
+	       ,(between(1,K,J)
+		,debug(progress,'~w:~w Step ~w of ~w',[Lr,T,J,K])
+		,debug(learning_rate_full,'~w:~w Step ~w of ~w',[Lr,T,J,K])
+		,findall(S-D
+			,(member(S,Ss)
+			 ,debug(progress,'~w:~w Sampling size: ~w',[Lr,T,S])
+			 ,debug(learning_rate_full,'~w:~w Sampling size: ~w',[Lr,T,S])
+			 % Soft cut stops backtracking into multiple learning steps.
+			 % when training with Thelma or with reduction(subhypothesis)
+			 ,G = once(timed_train_and_test(T,S,L,[Pos,Neg,BK,MS],Ps,M,V))
+			 ,timing(G, D)
+			 ,debug_clauses(learning_rate_full,'Learned:',Ps)
+			 ,debug(learning_rate_full,'Measured ~w: ~w',[M,V])
+			 ,debug(learning_rate_full,'Duration: ~w sec',[D])
+			 ,length(Ps, N)
+			 ,debug(learning_rate_full,'Hypothesis size: ~w',[N])
+			 )
+			,Vs)
+		)
+	       ,Rs).
 learning_rate(T,Lr,L,[Pos,Neg,BK,MS],M,K,Ss,Rs):-
 	findall(Vs
 	       ,(between(1,K,J)
@@ -346,6 +369,16 @@ learning_rate(T,Lr,L,[Pos,Neg,BK,MS],M,K,Ss,Rs):-
 		)
 	       ,Rs).
 
+
+%!	timing(+Goal,-Time) is det.
+%
+%	Call a Goal and report the Time it took.
+%
+timing(G, T):-
+	S is cputime
+	,call(G)
+	,E is cputime
+	,T is E - S.
 
 
 % ================================================================================
@@ -433,6 +466,7 @@ metric_name(tpr,'True Positive Rate (Recall)').
 metric_name(tnr,'True Negative Rate').
 metric_name(pre,'Precision').
 metric_name(fsc,'F-Score').
+metric_name(time,'Duration').
 
 
 %!	upcase_word(+Word,-Upcased) is det.

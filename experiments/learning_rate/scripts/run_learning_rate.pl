@@ -82,6 +82,16 @@ user:message_property(debug(progress), color( [ fg(yellow) ]) ).
          ,metagol:metarule/6.
 
 
+%!      performance_measure(?Metric) is semidet.
+%
+%       Set the performance Metric for all experiments.
+%
+%       Quick and dirty way to switch between performance metrics,
+%       across all experiments.
+%
+performance_measure(acc).
+
+
 %!      config(?Dataset,?Option,?Value) is semidet.
 %
 %       Dataset configuration options.
@@ -415,7 +425,7 @@ run_kin:-
         configuration:learner(L)
         ,once(setup(kin))
         ,T = kin/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 100
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
@@ -436,7 +446,7 @@ run_mtg_fragment:-
         configuration:learner(L)
         ,once(setup(mtg_fragment))
         ,T = ability/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 100
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
@@ -460,7 +470,7 @@ run_robots:-
         configuration:learner(L)
         ,once(setup(robots))
         ,T = move/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 10
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
@@ -481,7 +491,7 @@ run_path_no_noise:-
         configuration:learner(L)
         ,once(setup(path_no_noise))
         ,T = path_no_noise/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 100
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
@@ -502,7 +512,7 @@ run_path_ambiguities:-
         configuration:learner(L)
         ,once(setup(path_ambiguities))
         ,T = path_ambiguities/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 100
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
@@ -523,7 +533,7 @@ run_path_false_positives:-
         configuration:learner(L)
         ,once(setup(path_false_positives))
         ,T = path_false_positives/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 100
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
@@ -544,7 +554,7 @@ run_path_false_negatives:-
         configuration:learner(L)
         ,once(setup(path_false_negatives))
         ,T = path_false_negatives/2
-        ,M = acc
+        ,performance_measure(M)
         ,K = 100
         ,float_interval(1,9,1,Ss)
         % Uncomment the following two lines to test experiment setup.
