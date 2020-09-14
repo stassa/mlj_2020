@@ -335,12 +335,12 @@ learning_rate(T,Lr,L,[Pos,Neg,BK,MS],time,K,Ss,Rs):-
 			,(member(S,Ss)
 			 ,debug(progress,'~w:~w Sampling size: ~w',[Lr,T,S])
 			 ,debug(learning_rate_full,'~w:~w Sampling size: ~w',[Lr,T,S])
-			 % Soft cut stops backtracking into multiple learning steps.
-			 % when training with Thelma or with reduction(subhypothesis)
-			 ,G = once(timed_train_and_test(T,S,L,[Pos,Neg,BK,MS],Ps,M,V))
-			 ,timing(G, D)
+			 ,evaluation:train_test_splits(S,Pos,Pos_Train,_Pos_Test)
+			 ,evaluation:train_test_splits(S,Neg,Neg_Train,_Neg_Test)
+			 % Learn timing soft-cuts learning predicate goal
+			 % avoiding backtracking over nondet learning predicates.
+			 ,learn_timing([Pos_Train,Neg_Train,BK,MS],L,Ps,D)
 			 ,debug_clauses(learning_rate_full,'Learned:',Ps)
-			 ,debug(learning_rate_full,'Measured ~w: ~w',[M,V])
 			 ,debug(learning_rate_full,'Duration: ~w sec',[D])
 			 ,length(Ps, N)
 			 ,debug(learning_rate_full,'Hypothesis size: ~w',[N])
@@ -370,15 +370,38 @@ learning_rate(T,Lr,L,[Pos,Neg,BK,MS],M,K,Ss,Rs):-
 	       ,Rs).
 
 
-%!	timing(+Goal,-Time) is det.
+%!	learn_timig(+Problem,+Limit,-Program,-Time) is det.
 %
-%	Call a Goal and report the Time it took.
+%	Learn with a time limit and report the time it took.
 %
-timing(G, T):-
+%	Problem is a list [Pos,Neg,BK,MS], holding the elements of a MIL
+%	problem.
+%
+%	Limit is a floating point number, the number of seconds to set
+%	as a time limit for a learning attempt with Problem.
+%
+%	Program is the output of the current learning_predicate/1 given
+%	Problem.
+%
+%	Time is a floating point number, the time, in seconds, that the
+%	learning predicate took to complete one learning attempt on
+%	Problem.
+%
+%	Note that Time is at most equal to Limit. If Limit is exceeded,
+%	Time is equal to Limit and Program is empty.
+%
+learn_timing([Pos,Neg,BK,MS],L,Ps,T):-
 	S is cputime
-	,call(G)
+	,G = (   evaluation:learning_query(Pos,Neg,BK,MS,Ps)
+	     ->  true
+	     ;   Ps = []
+	     )
+	,C = call_with_time_limit(L,G)
+	,R = debug(learning_curve_full,'Exceeded Time limit: ~w sec',[L])
+	,catch(C,time_limit_exceeded,R)
 	,E is cputime
 	,T is E - S.
+
 
 
 % ================================================================================
